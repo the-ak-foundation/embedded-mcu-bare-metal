@@ -403,11 +403,12 @@ void scr_zw_game_handle(ak_msg_t* msg) {
 
 		zw_game_state = GAME_OVER;
 	}
-		BUZZER_PlayTones(tones_game_over);
+		BUZZER_PlayTones(tones_3beep);
 		break;
 
 	case ZW_GAME_EXIT_GAME: {
 		APP_DBG_SIG("ZW_GAME_EXIT_GAME\n");
+		timer_remove_attr(AC_TASK_DISPLAY_ID, ZW_GAME_TIME_TICK);
 		zw_game_state = GAME_OFF;
 		SCREEN_TRAN(scr_game_over_handle, &scr_game_over);
 	}

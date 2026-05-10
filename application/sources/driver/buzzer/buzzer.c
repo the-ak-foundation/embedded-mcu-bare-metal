@@ -6,7 +6,7 @@
 volatile       uint32_t          _beep_duration;
 volatile       bool              _tones_playing;
 volatile const Tone_TypeDef     *_tones;
-volatile       bool              _buzzer_sleep;
+static         bool              _buzzer_sleep = false;
 
 GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -127,27 +127,19 @@ void BUZZER_Disable(void) {
 	GPIO_Init(BUZZER_IO_PORT, &GPIO_InitStructure);
 }
 
+void BUZZER_Sleep(uint8_t silent) {
+	_buzzer_sleep = (bool)silent;
+	if (_buzzer_sleep) {
+		BUZZER_Disable();
+	}
+}
+
 // Start playing tones sequence
 // input:
 //   tones - pointer to tones array
 void BUZZER_PlayTones(const Tone_TypeDef * tones) {
-	if (_buzzer_sleep == 0) {
-		if (_tones == NULL) {
-			_tones = tones;
-			_tones_playing = true;
-			BUZZER_Enable(_tones->frequency,_tones->duration);
-		}
-	}
-}
-
-// Off Buzzer --- Buu
-void BUZZER_Sleep(bool sleep) {
-#define ON	(1)
-#define OFF	(0)
-	if (sleep == OFF) {
-		_buzzer_sleep = OFF;
-	}
-	else {
-		_buzzer_sleep = ON;
-	}
+	if (_buzzer_sleep) return;
+	_tones = tones;
+	_tones_playing = true;
+	BUZZER_Enable(_tones->frequency,_tones->duration);
 }

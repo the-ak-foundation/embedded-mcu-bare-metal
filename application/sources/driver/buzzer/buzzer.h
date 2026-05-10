@@ -15,44 +15,6 @@ typedef struct {
 	uint8_t  duration;
 } Tone_TypeDef;
 
-static const Tone_TypeDef tones_cc[] = {
-	{2000,2},
-	{   0,0},
-};
-
-static const Tone_TypeDef tones_BUM[] = {
-	{3000,3},
-	{4500,6},
-	{   0,0}
-};
-
-static const Tone_TypeDef tones_USB_con[] = {
-	{ 400,4},
-	{   0,1},
-	{1600,2},
-	{   0,0}
-};
-
-static const Tone_TypeDef tones_USB_dis[] = {
-	{1600,4},
-	{   0,1},
-	{ 400,2},
-	{   0,0}
-};
-
-static const Tone_TypeDef tones_Lets_go[] = {
-	{ 262,100},
-	{ 330,100},
-	{ 392,100},
-	{ 349,100},
-	{ 330,100},
-	{ 392,100},
-	{  44,100},
-	{   0,200},
-	{   0,200},
-	{   0,0}     // <-- tones end
-};
-
 static const Tone_TypeDef tones_startup[] = {
 	{2000,3},
 	{   0,3},
@@ -149,6 +111,22 @@ static const Tone_TypeDef tones_SMB[] = {
 	{   0, 0}
 };
 
+// USB connected: two ascending tones
+static const Tone_TypeDef tones_USB_con[] = {
+	{2000, 3},
+	{   0, 2},
+	{3500, 3},
+	{   0, 0}
+};
+
+// USB disconnected: two descending tones
+static const Tone_TypeDef tones_USB_dis[] = {
+	{3500, 3},
+	{   0, 2},
+	{2000, 3},
+	{   0, 0}
+};
+
 // Merry Christmas
 static const Tone_TypeDef tones_merryChristmas[] = {
 	{2637, 9}, // E7
@@ -208,18 +186,21 @@ static const Tone_TypeDef tones_merryChristmas[] = {
 	{   0, 0}  // <-- tones end
 };
 
-static const Tone_TypeDef tones_shoot[] = {
-	{4000, 1},
-	{3000, 1},
+// Short click for bullet shoot and menu navigation
+static const Tone_TypeDef tones_cc[] = {
+	{4000, 2},
+	{   0, 1},
+	{3000, 2},
 	{   0, 0}
 };
 
-static const Tone_TypeDef tones_game_over[] = {
-	{1000, 6},
-	{   0, 3},
-	{ 800, 6},
-	{   0, 3},
-	{ 500,10},
+// 8-bit style kill sound for zombie killed
+static const Tone_TypeDef tones_BUM[] = {
+	{3500, 1},
+	{2500, 1},
+	{1500, 1},
+	{ 800, 2},
+	{ 400, 2},
 	{   0, 0}
 };
 
@@ -227,8 +208,8 @@ static const Tone_TypeDef tones_game_over[] = {
 void BUZZER_Init(void);
 void BUZZER_Enable(uint16_t freq, uint32_t duration);
 void BUZZER_Disable(void);
+void BUZZER_Sleep(uint8_t silent);
 void BUZZER_PlayTones(const Tone_TypeDef * melody);
-void BUZZER_Sleep(bool sleep);
 
 extern void buzzer_irq( void );
 

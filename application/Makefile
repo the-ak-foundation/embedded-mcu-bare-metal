@@ -9,12 +9,12 @@
 # Utilitis define
 Print = @echo "~"
 
-# Name of build target ex: ak-base-kit-stm32l151-application.bin
-NAME_MODULE = ak-base-kit-stm32l151-application
+# Name of build target ex: Zomwar-application.bin
+NAME_MODULE = Zomwar-application
 PROJECT = $(NAME_MODULE)
 
-GCC_PATH		= /home/ctp/Workspace/Tools/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux/gcc-arm-none-eabi-10.3-2021.10
-PROGRAMER_PATH		= /home/ctp/Workspace/Tools/STM32CubeProgrammer/bin
+GCC_PATH		= /home/phuoc/Workspace/Tools/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux/gcc-arm-none-eabi-10.3-2021.10
+PROGRAMER_PATH		= /home/phuoc/Workspace/Tools/STM32CubeProgrammer/bin
 OPENOCD_CFG_PATH	= /usr/local/share/openocd/scripts/board/stm32ldiscovery.cfg
 
 # App start address, that need sync with declare in linker file and interrupt vector table.
@@ -64,6 +64,7 @@ include sources/ak/Makefile.mk
 include sources/app/Makefile.mk
 include sources/common/Makefile.mk
 include sources/driver/Makefile.mk
+include sources/libraries/Makefile.mk
 include sources/sys/Makefile.mk
 include sources/networks/Makefile.mk
 include sources/platform/stm32l/Makefile.mk

@@ -41,6 +41,7 @@
 #include "eeprom.h"
 #include "Adafruit_oled_drv.h"
 #include "flash.h"
+#include "screen_manager.h"
 
 /*****************************************************************************/
 /*  local declare
@@ -71,6 +72,7 @@ int32_t shell_lcd(uint8_t* argv);
 int32_t shell_boot(uint8_t* argv);
 int32_t shell_fwu(uint8_t* argv);
 int32_t shell_buzzer(uint8_t* argv);
+int32_t shell_key(uint8_t* argv);
 
 /*****************************************************************************/
 /*  command table
@@ -92,6 +94,7 @@ const cmd_line_t lgn_cmd_table[] = {
 	{(const int8_t*)"lcd",		shell_lcd,			(const int8_t*)"lcd"},
 	{(const int8_t*)"boot",		shell_boot,			(const int8_t*)"boot share"},
 	{(const int8_t*)"beep",		shell_buzzer,		(const int8_t*)"buzzer play tones"},
+	{(const int8_t*)"key",		shell_key,			(const int8_t*)"keyboard game control"},
 
 	/* End Of Table */
 	{(const int8_t*)0,(pf_cmd_func)0,(const int8_t*)0}
@@ -803,22 +806,22 @@ int32_t shell_buzzer(uint8_t* argv) {
 		break;
 
 	case '1': {
-		BUZZER_PlayTones(tones_3beep);
+		BUZZER_PlayTones(tones_cc);
 	}
 		break;
 
 	case '2': {
-		BUZZER_PlayTones(tones_3beep);
+		BUZZER_PlayTones(tones_BUM);
 	}
 		break;
 
 	case '3': {
-		BUZZER_PlayTones(tones_startup);
+		BUZZER_PlayTones(tones_USB_con);
 	}
 		break;
 
 	case '4': {
-		BUZZER_PlayTones(tones_3beep);
+		BUZZER_PlayTones(tones_USB_dis);
 	}
 		break;
 
@@ -853,6 +856,60 @@ int32_t shell_buzzer(uint8_t* argv) {
 		LOGIN_PRINT("7. \"beep 6\"                           : buzzer play tones three beeps \n");
 		LOGIN_PRINT("8. \"beep 7\"                           : buzzer play tones super mario bros \n");
 		LOGIN_PRINT("9. \"beep 8\"                           : buzzer play tones merry chrismast \n");
+		break;
+	}
+
+	return 0;
+}
+
+int32_t shell_key(uint8_t* argv) {
+	switch (*(argv + 4)) {
+	case 'U':
+		task_post_pure_msg(ZW_GAME_SCREEN_ID, ZW_GAME_BTN_UP_PRESSED);
+		break;
+
+	case 'u':
+		if (scr_mng_get_current_screen() == scr_zw_game_handle) {
+			task_post_pure_msg(ZW_GAME_SCREEN_ID, ZW_GAME_BTN_UP_RELEASED);
+		} else {
+			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_UP_RELEASED);
+		}
+		break;
+
+	case 'D':
+		task_post_pure_msg(ZW_GAME_SCREEN_ID, ZW_GAME_BTN_DOWN_PRESSED);
+		break;
+
+	case 'd':
+		if (scr_mng_get_current_screen() == scr_zw_game_handle) {
+			task_post_pure_msg(ZW_GAME_SCREEN_ID, ZW_GAME_BTN_DOWN_RELEASED);
+		} else {
+			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_DOWN_RELEASED);
+		}
+		break;
+
+	case 'f':
+		if (scr_mng_get_current_screen() == scr_zw_game_handle) {
+			task_post_pure_msg(ZW_GAME_SCREEN_ID, ZW_GAME_BTN_MODE_RELEASED);
+		} else {
+			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_MODE_RELEASED);
+		}
+		break;
+
+	case 'r':
+		view_render_display_off();
+		sys_ctrl_delay_ms(10);
+		sys_ctrl_reset();
+		break;
+
+	default:
+		LOGIN_PRINT("\n[HELP]\n");
+		LOGIN_PRINT("key U : up pressed   (start move up)\n");
+		LOGIN_PRINT("key u : up released  (stop move up)\n");
+		LOGIN_PRINT("key D : down pressed (start move down)\n");
+		LOGIN_PRINT("key d : down released(stop move down)\n");
+		LOGIN_PRINT("key f : space        (fire / select)\n");
+		LOGIN_PRINT("key r : esc          (reset game)\n");
 		break;
 	}
 

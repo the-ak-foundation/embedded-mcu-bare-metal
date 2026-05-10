@@ -28,32 +28,32 @@ view_screen_t scr_game_over = {
 void view_scr_game_over() {
 	view_render.fillScreen(BLACK);
 
-	view_render.drawRoundRect(29, 0, 70, 54, 20, WHITE);
+	view_render.drawRoundRect(29, 0, 70, 54, 18, WHITE);
 	view_render.fillRect(29, 33, 21, 21, BLACK);
-	view_render.drawLine(29, 33, 29, 52, WHITE);
+	view_render.drawLine(29, 32, 29, 52, WHITE);
 	view_render.fillRect(78, 33, 21, 21, BLACK);
 	view_render.fillRect(50, 53, 28, 1, BLACK);
-	view_render.drawLine(98, 33, 98, 52, WHITE);
+	view_render.drawLine(98, 32, 98, 52, WHITE);
 	view_render.drawLine(29, 52, 98, 52, WHITE);
 
 	view_render.drawBitmap(0,   0, bitmap_spiderweb_L, 16, 16, WHITE);
 	view_render.drawBitmap(110, 0, bitmap_spiderweb_R, 16, 16, WHITE);
 
-	view_render.drawBitmap(60, 5, icon_skull, 9, 8, WHITE);
+	view_render.drawBitmap(60, 3, icon_skull, 9, 8, WHITE);
 
-	view_render.drawLine(32, 12, 95, 15, WHITE);
+	view_render.drawLine(32, 11, 95, 11, WHITE);
 
 	view_render.setTextSize(2);
 	view_render.setTextColor(WHITE);
-	view_render.setCursor(40, 16);
+	view_render.setCursor(40, 13);
 	view_render.print("GAME");
-	view_render.setCursor(40, 31);
+	view_render.setCursor(40, 29);
 	view_render.print("OVER");
 
 	view_render.setTextSize(1);
-	view_render.setCursor(34, 45);
+	view_render.setCursor(34, 44);
 	view_render.print("Score:");
-	view_render.setCursor(72, 45);
+	view_render.setCursor(72, 44);
 	view_render.print(gamescore.score_now);
 
 	view_render.drawRoundRect(2, 54, 40, 10, 2, WHITE);

@@ -39,4 +39,12 @@ typedef struct {
   uint8_t tombstone_lane_2;  /* bit i = lane i có 2 bia mộ (cần lane_1 bit cũng set) */
 } zw_game_setting_t;
 
+/* default settings applied on every boot/reset */
+#define ZW_GAME_SETTING_DEFAULT_SILENT          (true)
+#define ZW_GAME_SETTING_DEFAULT_NUM_CAR         (0x15)  /* lanes 0,2,4 */
+#define ZW_GAME_SETTING_DEFAULT_BULLET_SPEED    (3)
+#define ZW_GAME_SETTING_DEFAULT_ZOMBIE_SPEED    (1)
+#define ZW_GAME_SETTING_DEFAULT_TOMBSTONE_L1    (0x15)  /* lanes 0,2,4 have >=1 tomb */
+#define ZW_GAME_SETTING_DEFAULT_TOMBSTONE_L2    (0x04)  /* lane 2 has 2 tombs */
+
 #endif //__APP_EEPROM_H__
