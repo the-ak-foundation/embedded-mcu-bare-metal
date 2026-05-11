@@ -25,6 +25,7 @@
 #include "sys_irq.h"
 
 #include "app.h"
+#include "app_bsp.h"
 #include "app_if.h"
 #include "app_dbg.h"
 #include "app_data.h"
@@ -864,37 +865,11 @@ int32_t shell_buzzer(uint8_t* argv) {
 
 int32_t shell_key(uint8_t* argv) {
 	switch (*(argv + 4)) {
-	case 'U':
-		task_post_pure_msg(ZW_GAME_SCREEN_ID, ZW_GAME_BTN_UP_PRESSED);
-		break;
-
-	case 'u':
-		if (scr_mng_get_current_screen() == scr_zw_game_handle) {
-			task_post_pure_msg(ZW_GAME_SCREEN_ID, ZW_GAME_BTN_UP_RELEASED);
-		} else {
-			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_UP_RELEASED);
-		}
-		break;
-
-	case 'D':
-		task_post_pure_msg(ZW_GAME_SCREEN_ID, ZW_GAME_BTN_DOWN_PRESSED);
-		break;
-
-	case 'd':
-		if (scr_mng_get_current_screen() == scr_zw_game_handle) {
-			task_post_pure_msg(ZW_GAME_SCREEN_ID, ZW_GAME_BTN_DOWN_RELEASED);
-		} else {
-			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_DOWN_RELEASED);
-		}
-		break;
-
-	case 'f':
-		if (scr_mng_get_current_screen() == scr_zw_game_handle) {
-			task_post_pure_msg(ZW_GAME_SCREEN_ID, ZW_GAME_BTN_MODE_RELEASED);
-		} else {
-			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_MODE_RELEASED);
-		}
-		break;
+	case 'U': zw_game_dispatch_input(ZW_GAME_BTN_UP_PRESSED);   break;
+	case 'u': zw_game_dispatch_input(ZW_GAME_BTN_UP_RELEASED);  break;
+	case 'D': zw_game_dispatch_input(ZW_GAME_BTN_DOWN_PRESSED); break;
+	case 'd': zw_game_dispatch_input(ZW_GAME_BTN_DOWN_RELEASED);break;
+	case 'f': zw_game_dispatch_input(ZW_GAME_BTN_MODE_RELEASED);break;
 
 	case 'r':
 		view_render_display_off();
@@ -908,8 +883,8 @@ int32_t shell_key(uint8_t* argv) {
 		LOGIN_PRINT("key u : up released  (stop move up)\n");
 		LOGIN_PRINT("key D : down pressed (start move down)\n");
 		LOGIN_PRINT("key d : down released(stop move down)\n");
-		LOGIN_PRINT("key f : space        (fire / select)\n");
-		LOGIN_PRINT("key r : esc          (reset game)\n");
+		LOGIN_PRINT("key f : space        (fire / mode)\n");
+		LOGIN_PRINT("key r : esc          (reboot)\n");
 		break;
 	}
 

@@ -55,27 +55,9 @@ void scr_startup_handle(ak_msg_t* msg) {
 					AC_DISPLAY_STARTUP_INTERVAL, \
 					TIMER_ONE_SHOT);
 
-		/* restore default settings on every boot/reset */
-		settingdata.silent           = ZW_GAME_SETTING_DEFAULT_SILENT;
-		settingdata.num_car          = ZW_GAME_SETTING_DEFAULT_NUM_CAR;
-		settingdata.bullet_speed     = ZW_GAME_SETTING_DEFAULT_BULLET_SPEED;
-		settingdata.zombie_speed     = ZW_GAME_SETTING_DEFAULT_ZOMBIE_SPEED;
-		settingdata.tombstone_lane_1 = ZW_GAME_SETTING_DEFAULT_TOMBSTONE_L1;
-		settingdata.tombstone_lane_2 = ZW_GAME_SETTING_DEFAULT_TOMBSTONE_L2;
-		eeprom_write(	EEPROM_SETTING_START_ADDR, \
-						(uint8_t*)&settingdata, \
-						sizeof(settingdata));
-
-		/* reset leaderboard to 0 on every boot */
-		zw_game_score_t def_score;
-		def_score.score_now = 0;
-		def_score.score_1st = 0;
-		def_score.score_2nd = 0;
-		def_score.score_3rd = 0;
-		eeprom_write(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&def_score, \
-						sizeof(def_score));
-
+		/* load settings/scores from EEPROM; write defaults on first boot */
+		zw_game_setting_read(&settingdata);
+		zw_game_score_read(&gamescore);
 		BUZZER_Sleep(settingdata.silent);
 	}
 		break;

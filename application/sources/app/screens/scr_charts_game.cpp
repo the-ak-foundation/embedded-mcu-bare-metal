@@ -3,8 +3,6 @@
 /*****************************************************************************/
 /* Variable Declaration - Charts game */
 /*****************************************************************************/
-static zw_game_score_t gamescore_charts;
-
 #define SPIDER_COUNT         (3)
 #define SPIDER_THREAD_COL    (7)
 #define SPIDER_BOB_RANGE     (3)
@@ -59,21 +57,21 @@ void view_scr_charts_game() {
 	view_render.print("1st");
 	view_render.drawBitmap(50, 38, bitmap_tombstone_rank, 30, 22, WHITE);
 	view_render.setTextColor(BLACK);
-	if (gamescore_charts.score_1st >= 0 && gamescore_charts.score_1st < 10) {
+	if (gamescore.score_1st >= 0 && gamescore.score_1st < 10) {
 		view_render.setCursor(62, 45);
-		view_render.print(gamescore_charts.score_1st);
+		view_render.print(gamescore.score_1st);
 	}
-	else if (gamescore_charts.score_1st >= 10 && gamescore_charts.score_1st < 100) {
+	else if (gamescore.score_1st >= 10 && gamescore.score_1st < 100) {
 		view_render.setCursor(59, 45);
-		view_render.print(gamescore_charts.score_1st);
+		view_render.print(gamescore.score_1st);
 	}
-	else if (gamescore_charts.score_1st >= 100 && gamescore_charts.score_1st < 1000) {
+	else if (gamescore.score_1st >= 100 && gamescore.score_1st < 1000) {
 		view_render.setCursor(56, 45);
-		view_render.print(gamescore_charts.score_1st);
+		view_render.print(gamescore.score_1st);
 	}
 	else {
 		view_render.setCursor(53, 45);
-		view_render.print(gamescore_charts.score_1st);
+		view_render.print(gamescore.score_1st);
 	}
 
 	view_render.setTextColor(WHITE);
@@ -81,23 +79,23 @@ void view_scr_charts_game() {
 	view_render.print("2nd");
 	view_render.drawBitmap(10, 40, bitmap_tombstone_rank, 30, 22, WHITE);
 	view_render.setTextColor(BLACK);
-	if (gamescore_charts.score_2nd >= 0 && gamescore_charts.score_2nd < 10)
+	if (gamescore.score_2nd >= 0 && gamescore.score_2nd < 10)
 	{
 		view_render.setCursor(22, 47);
-		view_render.print(gamescore_charts.score_2nd);
+		view_render.print(gamescore.score_2nd);
 	}
-	else if (gamescore_charts.score_2nd >= 10 && gamescore_charts.score_2nd < 100)
+	else if (gamescore.score_2nd >= 10 && gamescore.score_2nd < 100)
 	{
 		view_render.setCursor(19, 47);
-		view_render.print(gamescore_charts.score_2nd);
+		view_render.print(gamescore.score_2nd);
 	}
-	else if (gamescore_charts.score_2nd >= 100 && gamescore_charts.score_2nd < 1000){
+	else if (gamescore.score_2nd >= 100 && gamescore.score_2nd < 1000){
 		view_render.setCursor(16, 47);
-		view_render.print(gamescore_charts.score_2nd);
+		view_render.print(gamescore.score_2nd);
 	}
 	else {
 		view_render.setCursor(13, 47);
-		view_render.print(gamescore_charts.score_2nd);
+		view_render.print(gamescore.score_2nd);
 	}
 
 	view_render.setTextColor(WHITE);
@@ -105,23 +103,23 @@ void view_scr_charts_game() {
 	view_render.print("3rd");
 	view_render.drawBitmap(90, 42, bitmap_tombstone_rank, 30, 22, WHITE);
 	view_render.setTextColor(BLACK);
-	if (gamescore_charts.score_3rd >= 0 && gamescore_charts.score_3rd < 10)
+	if (gamescore.score_3rd >= 0 && gamescore.score_3rd < 10)
 	{
 		view_render.setCursor(102, 49);
-		view_render.print(gamescore_charts.score_3rd);
+		view_render.print(gamescore.score_3rd);
 	}
-	else if (gamescore_charts.score_3rd >= 10 && gamescore_charts.score_3rd < 100)
+	else if (gamescore.score_3rd >= 10 && gamescore.score_3rd < 100)
 	{
 		view_render.setCursor(99, 49);
-		view_render.print(gamescore_charts.score_3rd);
+		view_render.print(gamescore.score_3rd);
 	}
-	else if (gamescore_charts.score_3rd >= 100 && gamescore_charts.score_3rd < 1000) {
+	else if (gamescore.score_3rd >= 100 && gamescore.score_3rd < 1000) {
 		view_render.setCursor(96, 49);
-		view_render.print(gamescore_charts.score_3rd);
+		view_render.print(gamescore.score_3rd);
 	}
 	else {
 		view_render.setCursor(93, 49);
-		view_render.print(gamescore_charts.score_3rd);
+		view_render.print(gamescore.score_3rd);
 	}
 }
 
@@ -135,9 +133,7 @@ void scr_charts_game_handle(ak_msg_t* msg) {
 		view_render.initialize();
 		view_render_display_on();
 
-		eeprom_read(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore_charts, \
-						sizeof(gamescore_charts));
+		zw_game_score_read(&gamescore);
 
 		for (uint8_t i = 0; i < SPIDER_COUNT; i++) {
 			spider_y[i]   = SPIDER_INIT_Y[i];

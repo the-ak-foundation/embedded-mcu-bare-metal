@@ -281,10 +281,31 @@ void view_scr_zomwar_game() {
 /*****************************************************************************/
 /* Handle - Zomwar game screen */
 /*****************************************************************************/
+static void zw_game_input_handle(uint8_t sig) {
+	switch (sig) {
+	case ZW_GAME_BTN_UP_PRESSED:
+		task_post_pure_msg(ZW_GAME_GUNNER_ID, ZW_GAME_GUNNER_UP);
+		break;
+	case ZW_GAME_BTN_UP_RELEASED:
+		task_post_pure_msg(ZW_GAME_GUNNER_ID, ZW_GAME_GUNNER_STOP);
+		break;
+	case ZW_GAME_BTN_DOWN_PRESSED:
+		task_post_pure_msg(ZW_GAME_GUNNER_ID, ZW_GAME_GUNNER_DOWN);
+		break;
+	case ZW_GAME_BTN_DOWN_RELEASED:
+		task_post_pure_msg(ZW_GAME_GUNNER_ID, ZW_GAME_GUNNER_STOP);
+		break;
+	case ZW_GAME_BTN_MODE_RELEASED:
+		task_post_pure_msg(ZW_GAME_BULLET_ID, ZW_GAME_BULLET_SHOOT);
+		break;
+	default:
+		break;
+	}
+}
+
 void zw_game_level_setup() {
-	eeprom_read(	EEPROM_SETTING_START_ADDR, \
-					(uint8_t*)&settingsetup, \
-					sizeof(settingsetup));
+	zw_game_setting_read(&settingdata);
+	settingsetup = settingdata;
 }
 
 void zw_game_time_tick_setup() {
@@ -317,6 +338,7 @@ void scr_zw_game_handle(ak_msg_t* msg) {
 		zw_game_time_tick_setup();
 
 		zw_game_state = GAME_PLAY;
+		zw_game_register_input(zw_game_input_handle);
 	}
 		break;
 
@@ -337,48 +359,17 @@ void scr_zw_game_handle(ak_msg_t* msg) {
 	}
 		break;
 
-	case ZW_GAME_BTN_MODE_RELEASED: {
-		if (zw_game_state != GAME_OFF) {
-			task_post_pure_msg(ZW_GAME_BULLET_ID, ZW_GAME_BULLET_SHOOT);
-		}
-		else {
-			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_MODE_RELEASED);
-		}
-	}
+	/* BTN signals chỉ đến đây khi handler không được đăng ký (GAME_OFF) */
+	case ZW_GAME_BTN_MODE_RELEASED:
+		task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_MODE_RELEASED);
 		break;
 
-	case ZW_GAME_BTN_UP_PRESSED: {
-		if (zw_game_state != GAME_OFF) {
-			task_post_pure_msg(ZW_GAME_GUNNER_ID, ZW_GAME_GUNNER_UP);
-		}
-	}
+	case ZW_GAME_BTN_UP_RELEASED:
+		task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_UP_RELEASED);
 		break;
 
-	case ZW_GAME_BTN_UP_RELEASED: {
-		if (zw_game_state != GAME_OFF) {
-			task_post_pure_msg(ZW_GAME_GUNNER_ID, ZW_GAME_GUNNER_STOP);
-		}
-		else {
-			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_UP_RELEASED);
-		}
-	}
-		break;
-
-	case ZW_GAME_BTN_DOWN_PRESSED: {
-		if (zw_game_state != GAME_OFF) {
-			task_post_pure_msg(ZW_GAME_GUNNER_ID, ZW_GAME_GUNNER_DOWN);
-		}
-	}
-		break;
-
-	case ZW_GAME_BTN_DOWN_RELEASED: {
-		if (zw_game_state != GAME_OFF) {
-			task_post_pure_msg(ZW_GAME_GUNNER_ID, ZW_GAME_GUNNER_STOP);
-		}
-		else {
-			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_DOWN_RELEASED);
-		}
-	}
+	case ZW_GAME_BTN_DOWN_RELEASED:
+		task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_DOWN_RELEASED);
 		break;
 
 	case ZW_GAME_RESET: {
@@ -409,6 +400,7 @@ void scr_zw_game_handle(ak_msg_t* msg) {
 	case ZW_GAME_EXIT_GAME: {
 		APP_DBG_SIG("ZW_GAME_EXIT_GAME\n");
 		timer_remove_attr(AC_TASK_DISPLAY_ID, ZW_GAME_TIME_TICK);
+		zw_game_unregister_input();
 		zw_game_state = GAME_OFF;
 		SCREEN_TRAN(scr_game_over_handle, &scr_game_over);
 	}

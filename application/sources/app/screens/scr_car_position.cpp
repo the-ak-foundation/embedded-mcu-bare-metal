@@ -96,9 +96,7 @@ void scr_car_position_handle(ak_msg_t* msg) {
 
 		case CAR_POS_ITEM_ARRDESS_6: {
 			/* Save to EEPROM and return to settings screen */
-			eeprom_write(	EEPROM_SETTING_START_ADDR, \
-							(uint8_t*)&settingdata, \
-							sizeof(settingdata));
+			zw_game_setting_write(&settingdata);
 			SCREEN_TRAN(scr_game_setting_handle, &scr_game_setting);
 			BUZZER_PlayTones(tones_startup);
 		}

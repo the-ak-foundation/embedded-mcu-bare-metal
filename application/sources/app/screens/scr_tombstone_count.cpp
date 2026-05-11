@@ -110,9 +110,7 @@ void scr_tombstone_count_handle(ak_msg_t* msg) {
 
 		case TB_COUNT_ITEM_ARRDESS_6: {
 			/* Lưu EEPROM và về settings */
-			eeprom_write(	EEPROM_SETTING_START_ADDR,
-							(uint8_t*)&settingdata,
-							sizeof(settingdata));
+			zw_game_setting_write(&settingdata);
 			SCREEN_TRAN(scr_game_setting_handle, &scr_game_setting);
 			BUZZER_PlayTones(tones_startup);
 		}

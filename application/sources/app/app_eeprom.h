@@ -47,4 +47,22 @@ typedef struct {
 #define ZW_GAME_SETTING_DEFAULT_TOMBSTONE_L1    (0x15)  /* lanes 0,2,4 have >=1 tomb */
 #define ZW_GAME_SETTING_DEFAULT_TOMBSTONE_L2    (0x04)  /* lane 2 has 2 tombs */
 
+#define ZW_GAME_EEPROM_MAGIC_NUMBER   ((uint32_t)0xDEAD1234)
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern zw_game_score_t gamescore;
+extern bool zw_game_score_read(zw_game_score_t* data);
+extern bool zw_game_score_write(zw_game_score_t* data);
+
+extern zw_game_setting_t settingdata;
+extern bool zw_game_setting_read(zw_game_setting_t* data);
+extern bool zw_game_setting_write(zw_game_setting_t* data);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif //__APP_EEPROM_H__

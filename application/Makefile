@@ -216,6 +216,7 @@ $(OBJECTS_DIR)/%.o: %.s
 
 .PHONY: help
 help:
+	$(Print) "[make run   dev=/dev/tty*] flash firmware then launch keyboard controller"
 	$(Print) "[make flash dev=/dev/tty*] burn firmware via ak bootloader"
 	$(Print) "             Note: This option is needed install ak-flash. Link download & install: https://github.com/ak-embedded-software/ak-flash"
 	$(Print) "             Example: make flash dev=/dev/ttyUSB0"
@@ -229,11 +230,14 @@ help:
 
 .PHONY: flash
 flash: all
-	$(Print) BURNING $(TARGET:.axf=.bin) to target
 ifdef dev
-	ak-flash $(dev) $(TARGET:.axf=.bin) $(APP_START_ADDR_VAL)
+	@output=$$(ak-flash $(dev) $(TARGET:.axf=.bin) $(APP_START_ADDR_VAL) 2>&1); \
+	printf '%s\n' "$$output"; \
+	echo "$$output" | grep -q "\[FAILED\]" && { echo "[key] flash failed, skipping keyboard controller"; exit 1; }; \
+	gcc -Wall -o ../tools/key ../tools/key.c && \
+	../tools/key $(dev)
 else
-	$(PROGRAMER_PATH)/STM32_Programmer.sh -c port=SWD -w $(TARGET:.axf=.bin) $(APP_START_ADDR_VAL) -rst
+	@$(PROGRAMER_PATH)/STM32_Programmer.sh -c port=SWD -w $(TARGET:.axf=.bin) $(APP_START_ADDR_VAL) -rst
 endif
 
 .PHONY: com

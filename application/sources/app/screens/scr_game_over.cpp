@@ -1,11 +1,6 @@
 #include "scr_game_over.h"
 
 /*****************************************************************************/
-/* Variable Declaration - game over */
-/*****************************************************************************/
-static zw_game_score_t gamescore;
-
-/*****************************************************************************/
 /* View - game over */
 /*****************************************************************************/
 static void view_scr_game_over();
@@ -95,9 +90,7 @@ void scr_game_over_handle(ak_msg_t* msg) {
 		view_render.initialize();
 		view_render_display_on();
 
-		eeprom_read(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore, \
-						sizeof(gamescore));
+		zw_game_score_read(&gamescore);
 
 		eeprom_read(	EEPROM_SCORE_PLAY_ADDR, \
 						(uint8_t*)&gamescore.score_now, \
@@ -110,9 +103,7 @@ void scr_game_over_handle(ak_msg_t* msg) {
 	case AC_DISPLAY_BUTTON_MODE_RELEASED: {
 		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_RELEASED\n");
 
-		eeprom_write(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore, \
-						sizeof(gamescore));
+		zw_game_score_write(&gamescore);
 		SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
 	}
 		BUZZER_PlayTones(tones_cc);
@@ -121,9 +112,7 @@ void scr_game_over_handle(ak_msg_t* msg) {
 	case AC_DISPLAY_BUTTON_UP_RELEASED: {
 		APP_DBG_SIG("AC_DISPLAY_BUTTON_UP_RELEASED\n");
 
-		eeprom_write(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore, \
-						sizeof(gamescore));
+		zw_game_score_write(&gamescore);
 		SCREEN_TRAN(scr_charts_game_handle, &scr_charts_game);
 	}
 		BUZZER_PlayTones(tones_cc);
@@ -132,9 +121,7 @@ void scr_game_over_handle(ak_msg_t* msg) {
 	case AC_DISPLAY_BUTTON_DOWN_RELEASED: {
 		APP_DBG_SIG("AC_DISPLAY_BUTTON_DOWN_RELEASED\n");
 
-		eeprom_write(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore, \
-						sizeof(gamescore));
+		zw_game_score_write(&gamescore);
 		SCREEN_TRAN(scr_zw_game_handle, &scr_zomwar_game);
 	}
 		BUZZER_PlayTones(tones_cc);

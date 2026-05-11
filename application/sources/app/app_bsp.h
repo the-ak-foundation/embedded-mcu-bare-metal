@@ -1,6 +1,9 @@
 #ifndef __APP_BSP_H__
 #define __APP_BSP_H__
 
+#include <stdint.h>
+#include "button.h"
+
 #define BUTTON_MODE_ID					(1)
 #define BUTTON_UP_ID					(2)
 #define BUTTON_DOWN_ID					(3)
@@ -12,5 +15,10 @@ extern button_t btn_down;
 extern void btn_mode_callback(void*);
 extern void btn_up_callback(void*);
 extern void btn_down_callback(void*);
+
+typedef void (*zw_game_input_fn_t)(uint8_t sig);
+extern void zw_game_register_input(zw_game_input_fn_t fn);
+extern void zw_game_unregister_input(void);
+extern void zw_game_dispatch_input(uint8_t sig);
 
 #endif //__APP_BSP_H__

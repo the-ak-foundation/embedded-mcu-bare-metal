@@ -3,7 +3,6 @@
 /*****************************************************************************/
 /* Variable Declaration - Setting game */
 /*****************************************************************************/
-zw_game_setting_t settingdata;
 static uint8_t setting_location_chosse;
 
 /*****************************************************************************/
@@ -110,9 +109,7 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 		APP_DBG_SIG("SCREEN_ENTRY\n");
 		view_render.clear();
 		setting_location_chosse = SETTING_ITEM_ARRDESS_1;
-		eeprom_read(	EEPROM_SETTING_START_ADDR,
-						(uint8_t*)&settingdata,
-						sizeof(settingdata));
+		zw_game_setting_read(&settingdata);
 	}
 		break;
 
@@ -148,9 +145,7 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 			break;
 
 		case SETTING_ITEM_ARRDESS_5: {
-			eeprom_write(	EEPROM_SETTING_START_ADDR,
-							(uint8_t*)&settingdata,
-							sizeof(settingdata));
+			zw_game_setting_write(&settingdata);
 			SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
 			BUZZER_PlayTones(tones_startup);
 		}
