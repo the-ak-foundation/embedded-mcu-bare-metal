@@ -1,7 +1,7 @@
 #include "scr_bitmap.h"
 
 /*****************************************************************************/
-/* scr_archery_game - Bitmap*/
+/* scr_zomwar_game - Bitmap*/
 /*****************************************************************************/
 
 const unsigned char PROGMEM bitmap_gunner_I [] = {
