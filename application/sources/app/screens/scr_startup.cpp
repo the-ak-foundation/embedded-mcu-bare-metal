@@ -1,8 +1,5 @@
 #include "scr_startup.h"
 
-/*****************************************************************************/
-/* View - startup */
-/*****************************************************************************/
 static void view_scr_startup();
 
 view_dynamic_t dyn_view_startup = {
@@ -24,7 +21,6 @@ void view_scr_startup() {
 #define AK_LOGO_AXIS_X		(23)
 #define AK_LOGO_TEXT		(AK_LOGO_AXIS_X + 4)
 	/* ak logo */
-	BUZZER_PlayTones(tones_startup);
 	view_render.clear();
 	view_render.setTextSize(1);
 	view_render.setTextColor(WHITE);
@@ -38,53 +34,32 @@ void view_scr_startup() {
 	view_render.print("(__)(__)(_)\\_)");
 	view_render.setCursor(AK_LOGO_TEXT, 42);
 	view_render.print("Active Kernel");
-	view_render.update();
 }
 
-/*****************************************************************************/
-/* Handle - startup */
-/*****************************************************************************/
-void scr_startup_handle(ak_msg_t* msg) {
+void scr_startup_handle(ak_msg_t *msg) {
 	switch (msg->sig) {
 	case AC_DISPLAY_INITIAL: {
 		APP_DBG_SIG("AC_DISPLAY_INITIAL\n");
 		view_render.initialize();
 		view_render_display_on();
-		timer_set(	AC_TASK_DISPLAY_ID, \
-					AC_DISPLAY_SHOW_LOGO, \
-					AC_DISPLAY_STARTUP_INTERVAL, \
-					TIMER_ONE_SHOT);
+		timer_set(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_LOGO, AC_DISPLAY_STARTUP_INTERVAL, TIMER_ONE_SHOT);
+	} break;
 
-		/* reset về default mỗi lần boot */
-		settingdata.silent           = ZW_GAME_SETTING_DEFAULT_SILENT;
-		settingdata.num_car          = ZW_GAME_SETTING_DEFAULT_NUM_CAR;
-		settingdata.bullet_speed     = ZW_GAME_SETTING_DEFAULT_BULLET_SPEED;
-		settingdata.zombie_speed     = ZW_GAME_SETTING_DEFAULT_ZOMBIE_SPEED;
-		settingdata.tombstone_lane_1 = ZW_GAME_SETTING_DEFAULT_TOMBSTONE_L1;
-		settingdata.tombstone_lane_2 = ZW_GAME_SETTING_DEFAULT_TOMBSTONE_L2;
-		zw_game_setting_write(&settingdata);
-
-		gamescore.score_now = 0;
-		gamescore.score_1st = 0;
-		gamescore.score_2nd = 0;
-		gamescore.score_3rd = 0;
-		zw_game_score_write(&gamescore);
-
-		BUZZER_Sleep(settingdata.silent);
-	}
-		break;
-
-	case AC_DISPLAY_BUTTON_MODE_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_RELEASED\n");
-		SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
-	}
-		break;
+	case AC_DISPLAY_BUTON_MODE_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTON_MODE_PRESSED\n");
+		timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_LOGO);
+		SCREEN_TRAN(scr_qrcode_handle, &scr_qrcode);
+	} break;
 
 	case AC_DISPLAY_SHOW_LOGO: {
 		APP_DBG_SIG("AC_DISPLAY_SHOW_LOGO\n");
-		SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
-	}
-		break;
+		SCREEN_TRAN(scr_qrcode_handle, &scr_qrcode);
+	} break;
+
+	case AC_DISPLAY_SHOW_IDLE: {
+		APP_DBG_SIG("AC_DISPLAY_SHOW_IDLE\n");
+		SCREEN_TRAN(scr_idle_handle, &scr_idle);
+	} break;
 
 	default:
 		break;

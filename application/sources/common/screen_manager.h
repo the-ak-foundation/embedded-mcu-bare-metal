@@ -31,6 +31,9 @@ typedef struct {
 #define SCREEN_TRAN(target, scr_obj)		\
 		scr_mng_tran(target, scr_obj)
 
+#define SCREEN_BACK()		\
+		scr_mng_back()
+
 #define SCREEN_DISPATCH(msg)		\
 		scr_mng_dispatch(msg)
 
@@ -39,8 +42,10 @@ typedef struct {
 
 extern void scr_mng_ctor(scr_mng_t* scr_mng, screen_f init_scr, view_screen_t* scr_obj);
 extern void scr_mng_tran(screen_f target, view_screen_t* scr_obj);
+extern void scr_mng_back();
 extern void scr_mng_contain_screen_none_update_mark();
 extern void scr_mng_dispatch(ak_msg_t* msg);
 extern screen_f scr_mng_get_current_screen();
+extern view_screen_t* scr_mng_get_current_view_screen();
 
 #endif //__SCREEN_MANAGER_H__

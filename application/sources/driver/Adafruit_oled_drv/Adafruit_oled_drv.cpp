@@ -54,6 +54,9 @@ bool Adafruit_oled_drv::initialize() {
 	writeCommand(0x40);
 	writeCommand(SH1106_DISPLAY_ALL_ON_RESUME);	 // 0xA4
 	writeCommand(SH1106_NORMAL_DISPLAY);			 // 0xA6
+	writeCommand(SH1106_DISPLAY_ON);				 //--turn on oled panel
+
+	delay(10);	  // wait for the screen loaded.
 
 #elif defined(SSD1306_DRIVER_EN)
 	writeCommand(SSD1306_DISPLAY_OFF);		 // display off
@@ -80,6 +83,9 @@ bool Adafruit_oled_drv::initialize() {
 	writeCommand(0x40);							 //--set com pins hardware configuration
 	writeCommand(SSD1306_CHARGE_PUMP);			 //--set vcomh
 	writeCommand(0x14);							 // 0x20,0.77xVcc
+	writeCommand(SSD1306_DISPLAY_ON);	//--turn on oled panel
+
+	delay(10);	  // wait for the screen loaded.
 
 #elif defined(SSD1309_DRIVER_EN)
 	writeCommand(SSD1309_DISPLAY_OFF);
@@ -106,13 +112,12 @@ bool Adafruit_oled_drv::initialize() {
 	writeCommand(0x14);
 	writeCommand(SSD1309_DISPLAY_ALL_ON_RESUME);
 	writeCommand(SSD1309_NORMAL_DISPLAY);
+	writeCommand(SSD1309_DISPLAY_ON);
 
+	delay(10);	  // wait for the screen loaded.
 #else
 #error "Don't know oled driver type."
 #endif
-
-	update();       // flush blank framebuffer to OLED GRAM before turning on
-	display_on();   // turn on with clean GRAM — no stale content flash
 
 	return true;
 }
@@ -145,6 +150,14 @@ void Adafruit_oled_drv::display_off() {
 #else
 #error "Don't know oled driver type."
 #endif
+}
+
+const unsigned char* Adafruit_oled_drv::getFrameBuffer() const {
+	return m_pFramebuffer;
+}
+
+unsigned int Adafruit_oled_drv::getFrameBufferSize() const {
+	return FBSIZE;
 }
 
 void Adafruit_oled_drv::writeCommand(unsigned char cmd) {

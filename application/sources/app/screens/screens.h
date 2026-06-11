@@ -1,59 +1,46 @@
 #ifndef __SCREENS_H__
 #define __SCREENS_H__
 
-#include "scr_zomwar_game.h"
-#include "scr_charts_game.h"
-#include "scr_game_over.h"
-#include "scr_game_setting.h"
-#include "scr_car_position.h"
-#include "scr_tombstone_count.h"
-#include "scr_idle.h"
-#include "scr_menu_game.h"
-#include "scr_startup.h"
+#include "fsm.h"
+#include "port.h"
+#include "message.h"
+#include "timer.h"
 
-// scr_zomwar_game
-extern view_dynamic_t dyn_view_item_zomwar_game;
-extern view_screen_t scr_zomwar_game;
-extern void scr_zw_game_handle(ak_msg_t* msg);
+#include "sys_ctrl.h"
+#include "sys_dbg.h"
 
-// scr_charts_game
-extern view_dynamic_t dyn_view_item_charts_game;
-extern view_screen_t scr_charts_game;
-extern void scr_charts_game_handle(ak_msg_t* msg);
+#include "app.h"
+#include "app_dbg.h"
+#include "task_list.h"
+#include "task_display.h"
+#include "view_render.h"
 
-// scr_game_over
-extern view_dynamic_t dyn_view_item_game_over;
-extern view_screen_t scr_game_over;
-extern void scr_game_over_handle(ak_msg_t* msg);
+#include "buzzer.h"
 
-// scr_game_setting
-extern view_dynamic_t dyn_view_item_game_setting;
-extern view_screen_t scr_game_setting;
-extern void scr_game_setting_handle(ak_msg_t* msg);
+#include <math.h>
+#include <vector>
 
-// scr_car_position
-extern view_dynamic_t dyn_view_item_car_position;
-extern view_screen_t scr_car_position;
-extern void scr_car_position_handle(ak_msg_t* msg);
-
-// scr_tombstone_count
-extern view_dynamic_t dyn_view_item_tombstone_count;
-extern view_screen_t scr_tombstone_count;
-extern void scr_tombstone_count_handle(ak_msg_t* msg);
+#include "qrcode.h"
+#include "screens_bitmap.h"
 
 // scr_idle
 extern view_dynamic_t dyn_view_idle;
 extern view_screen_t scr_idle;
 extern void scr_idle_handle(ak_msg_t* msg);
 
-// scr_menu_game
-extern view_dynamic_t dyn_view_item_menu_game;
-extern view_screen_t scr_menu_game;
-extern void scr_menu_game_handle(ak_msg_t* msg);
+// scr_qrcode
+extern view_dynamic_t dyn_view_qrcode;
+extern view_screen_t scr_qrcode;
+extern void scr_qrcode_handle(ak_msg_t* msg);
 
 // scr_startup
 extern view_dynamic_t dyn_view_startup;
 extern view_screen_t scr_startup;
 extern void scr_startup_handle(ak_msg_t* msg);
+
+// scr_welcome
+extern view_dynamic_t dyn_view_welcome;
+extern view_screen_t scr_welcome;
+extern void scr_welcome_handle(ak_msg_t* msg);
 
 #endif //__SCREENS_H__
