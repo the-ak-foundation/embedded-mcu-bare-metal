@@ -6,4 +6,7 @@
 // scr_welcome
 extern const unsigned char PROGMEM bitmap_dolphin[];
 
+// scr_game_11m
+extern const unsigned char PROGMEM bitmap_ball[];
+
 #endif //__SCREENS_BITMAP_H__
