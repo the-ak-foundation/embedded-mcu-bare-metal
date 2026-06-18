@@ -25,7 +25,7 @@
 #include "screens_bitmap.h"
 #include "screens.h"
 
-// Game state values for zw_game_state
+// Game state values for 11m_game_state
 #define GAME_OFF  (0)
 #define GAME_PLAY (1)
 #define GAME_OVER (2)
