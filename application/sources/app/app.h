@@ -159,7 +159,19 @@ enum {
 	AC_DISPLAY_SHOW_MERRY_CHRISTMAS_SNOW_MOVING_UPDATE,
 	AC_DISPLAY_SHOW_MERRY_CHRISTMAS_SLEEP,
 	AC_DISPLAY_SHOW_MODBUS_PULL_UPDATE,
-	AC_DISPLAY_SHOW_MODBUS_PULL_SLEEP
+	AC_DISPLAY_SHOW_MODBUS_PULL_SLEEP,
+};
+
+/*****************************************************************************/
+/*  11m game "SCREEN" task define
+ */
+/*****************************************************************************/
+/* define timer */
+#define EM_GAME_TIME_TICK_INTERVAL									(100)
+#define EM_GAME_TIME_EXIT_INTERVAL									(3000)
+/* define signal */
+enum {
+	EM_GAME_EXIT_GAME,
 };
 
 /*****************************************************************************/

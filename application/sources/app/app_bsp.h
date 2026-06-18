@@ -5,6 +5,8 @@
 #define BUTTON_UP_ID					(2)
 #define BUTTON_DOWN_ID					(3)
 
+#include "button.h"
+
 extern button_t btn_mode;
 extern button_t btn_up;
 extern button_t btn_down;
