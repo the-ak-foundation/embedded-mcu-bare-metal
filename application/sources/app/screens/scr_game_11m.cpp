@@ -10,23 +10,21 @@ void em_game_frame_display()
 {
     view_render.clear();
 
-    // Khung thành ngoài
     view_render.fillRect(18, 0, 88, 3, WHITE);   // xà ngang ngoài
     view_render.fillRect(18, 0, 3, 30, WHITE);   // cột trái ngoài
     view_render.fillRect(103, 0, 3, 30, WHITE);  // cột phải ngoài
 
-    // Vạch ngang sân
     view_render.fillRect(0, 28, LCD_WIDTH, 2, WHITE);
 
-    // Vạch sân phối cảnh
     view_render.drawLine(14, 30, 2, LCD_HEIGHT - 22, WHITE);
     view_render.drawLine(110, 30, LCD_WIDTH - 3, LCD_HEIGHT - 22, WHITE);
     view_render.fillRect(2, LCD_HEIGHT - 22, LCD_WIDTH - 4, 2, WHITE);
 
-    // Chấm pen
     view_render.fillRect(61, 45, 3, 3, WHITE);
 
 	view_render.drawBitmap(56, 14, bitmap_goalkeeper, 13, 16, WHITE);
+	view_render.drawBitmap(49, 43, bitmap_player, 11, 16, WHITE);
+	view_render.drawBitmap(59, 43, bitmap_ball, 7, 7, WHITE);
 }
 
 /*****************************************************************************/
@@ -54,7 +52,6 @@ void view_scr_game_11m()
 	if (em_game_state == GAME_PLAY)
 	{
         em_game_frame_display();
-        view_render.drawBitmap(61, 43, bitmap_ball, 7, 7, WHITE);
 	}
 	else if (em_game_state == GAME_OVER)
 	{
