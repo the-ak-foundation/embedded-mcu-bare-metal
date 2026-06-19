@@ -1,49 +1,59 @@
-# AK Embedded Base Kit - STM32L151
+# Zomwar - Game built on AK Embedded Base Kit
 
-[<img src="hardware/images/ak-foundation-logo.png" width="240"/>](https://github.com/the-ak-foundation)
+## Gameplay Demo
 
-This kit would not have been possible without the help of [EPCB](https://epcb.vn/pages/frontpage).
+## Documentation
 
-AK Embedded Base Kit, utilizing STM32L151 MCU, is an evaluation kit for advanced embedded software learners.
+## Introduction
 
-## Features
+### I. Hardware
 
-- This kit integrates 1.54" Oled LCD, 3 push buttons, and 1 buzzer, which would be sufficient to create a small video game with an event driven paradigm.
-- It also includes RS485, Qwiic Connect System, and Grove Ecosystems, suitable for prototyping other practical applications in embedded systems.
+<table align="center">
+  <tr>
+    <td align="center"><img src="resources/images/board/ak-embedded-base-kit-version-3.jpg" alt="AK Embedded Base Kit - STM32L151 - v3.0" width="480"/></td>
+  </tr>
+</table>
+<p align="center"><strong><em>Figure 1:</em></strong> AK Embedded Base Kit - STM32L151</p>
 
-## Purpose
+[AK Embedded Base Kit](https://epcb.vn/products/ak-embedded-base-kit-lap-trinh-nhung-vi-dieu-khien-mcu) is an evaluation kit aimed at intermediate and advanced embedded software learners.
 
-Students who are enrolled in the AK foundation's embedded training program will make use of this evaluation kit to develop a small unique video game that will be able to run smoothly as well as closely follow an event driven paradigm in embedded systems programming. This repository also contains all the code which would form the AK framework that students can use to facilitate their development process.
+The kit integrates a **1.54" OLED LCD**, **3 push buttons**, and **a buzzer** capable of playing short melodies, giving you everything you need to study **event-driven systems** through hands-on game-machine design.
+It also exposes **RS485**, the **Qwiic Connect System**, and **Grove** connectors, so it doubles as a convenient prototyping board for real-world embedded projects.
 
-We also hope that this repository will also be useful for those are on the look out for a well-built kit to practice their embedded systems programming skills.
+**MCU Overview:**
 
-[<img src="hardware/images/ak-embedded-base-kit-version-3.jpg" width="480"/>](<https://epcb.vn/products/ak-embedded-base-kit-lap-trinh-nhung-vi-dieu-khien-mcu>)
+```text
+SoC Name : STM32L151CBT6
+RAM      : 16 KB
 
-## Memory map
+Flash Partitions Layout
+----------------------
+[ 0x08000000 - 0x08001FFF ] : Bootloader Partition (8 KB)
+=> AK Bootloader
 
-AK base kit uses the following memory map to run its application code
+[ 0x08002000 - 0x08002FFF ] : BSF Shared Partition (4 KB)
+=> Used for data sharing between Bootloader and Application
 
-- [ 0x08000000 ] : **Boot** [[ak-base-kit-stm32l151-boot.bin]](https://github.com/ak-embedded-software/ak-base-kit-stm32l151/blob/main/hardware/bin/ak-base-kit-stm32l151-boot.bin)
-- [ 0x08002000 ] : **BSF** [ Memory for data sharing between Boot and Application ]
-- [ 0x08003000 ] : **Application** [[ak-base-kit-stm32l151-application.bin]](https://github.com/ak-embedded-software/ak-base-kit-stm32l151/blob/main/hardware/bin/ak-base-kit-stm32l151-application.bin)                                             |
-
->**Note:** After loading the boot and application firmware, you can use [AK - Flash](https://github.com/ak-embedded-software/ak-flash), a CLI to work with the AK base kit, to load the application directly through the kit's USB port. Once installed, the following command will flash user's defined code into the kit's application's memory region.
-
-```sh
-ak_flash /dev/ttyUSB0 ak-base-kit-stm32l151-application.bin 0x08003000
+[ 0x08003000 - 0x0801FFFF ] : Application Partition (116 KB)
+=> Zomwar firmware
 ```
 
-## Hardware
+**MCU Naming Convention:**
 
-[AK base kit's schematic](/hardware/schematic/schematic-ak-embedded-base-kit-version-3.pdf)
+| Part | Meaning |
+|---|---|
+| `STM32` | STMicroelectronics 32-bit MCU family. |
+| `L` | Low-power series. |
+| `151` | STM32L151 product line. |
+| `C` | 48-pin package. |
+| `B` | 128 KB Flash memory. |
+| `T` | LQFP package. |
+| `6` | Industrial temperature grade. |
 
-[<img src="hardware/images/board-view-top.png" width="480"/>](<https://epcb.vn/products/ak-embedded-base-kit-lap-trinh-nhung-vi-dieu-khien-mcu>)
 
-[<img src="hardware/images/board-view-bottom.png" width="480"/>](https://epcb.vn/products/ak-embedded-base-kit-lap-trinh-nhung-vi-dieu-khien-mcu)
-
-## Reference
-
-| Topic | Link |
-| ------ | ------ |
-| Tutorials | <https://epcb.vn/blogs/ak-embedded-software> |
-| Vendor | <https://epcb.vn/products/ak-embedded-base-kit-lap-trinh-nhung-vi-dieu-khien-mcu> |
+<table align="center">
+  <tr>
+    <td align="center"><img src="resources/images/board/board-view-top-bottom.png" width="900"/></td>
+  </tr>
+</table>
+<p align="center"><strong><em>Figure 2:</em></strong> Board view Top + Bottom </p>
