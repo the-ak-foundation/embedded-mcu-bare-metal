@@ -24,10 +24,16 @@ Build file:
 ```bash
 make
 ```
-Nạp lên kit:
+Nạp lên kit (dùng ST-Link V2):
 
 ```bash
 make flash
+```
+
+Nạp lên kit (dùng UART):
+
+```bash
+make flash dev=/dev/ttyUSB0
 ```
 
 Xóa file build:
@@ -37,17 +43,6 @@ make clean
 ```
 
 ## Kết quả
-
-Nếu CPU dừng lại tại main() là thành công.
-
-```bash
-st-util &
-arm-none-eabi-gdb 00-minimal.elf
-(gdb) target extended-remote :4242
-(gdb) load
-(gdb) break main
-(gdb) continue
-```
 
 <table align="center">
   <tr>
