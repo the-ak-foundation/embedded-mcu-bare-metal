@@ -1,22 +1,19 @@
 ##############################################################################
-# Makefile - 01-blink - STM32L151CBT6
+# Makefile - 00-blink - STM32L151CBT6
 ##############################################################################
 
-# Utilities define
 Print = @echo "~"
 
-# SOC, flash and RAM info
 SOC_NAME            = STM32L151CBT6
-SOC_FLASH_BYTES     = 131072 # 128KB
-SOC_SRAM_BYTES      = 16384  # 16KB
+SOC_FLASH_BYTES     = 131072
+SOC_SRAM_BYTES      = 16384
 FLASH_BASE_ADDR_VAL = 0x08000000
+APP_START_ADDR_VAL  = 0x08003000
 
-# Name of build target ex: 01-blink-application.bin
-NAME_MODULE = 01-blink-application
+NAME_MODULE = 00-blink
 PROJECT     = $(NAME_MODULE)
 
 GCC_PATH = /home/phuoc/Workspace/Tools/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux/gcc-arm-none-eabi-10.3-2021.10
-PROGRAMER_PATH = /home/phuoc/Workspace/Tools/STM32CubeProgrammer/bin
 
 #|---------------------------------------------------------------------------------------------------|
 #| OPTIMIZE LEVELS                                                                                   |
@@ -28,7 +25,6 @@ PROGRAMER_PATH = /home/phuoc/Workspace/Tools/STM32CubeProgrammer/bin
 #|------------|----------------------------------|--------------|---------|------------|-------------|
 OPTIMIZE_OPTION = -g3 -O0
 
-# Warning option
 WARNING_OPTION = -Wall -Wextra -Werror -Wundef -Wshadow
 
 OBJECTS_DIR = build_$(NAME_MODULE)
@@ -38,24 +34,20 @@ LDFILE      = stm32l151xx.ld
 SOURCES = bm_led_blink.c
 OBJECTS = $(patsubst %.c, $(OBJECTS_DIR)/%.o, $(SOURCES))
 
-# The command for calling the compiler.
 CC       = $(GCC_PATH)/bin/arm-none-eabi-gcc
 OBJCOPY  = $(GCC_PATH)/bin/arm-none-eabi-objcopy
 OBJDUMP  = $(GCC_PATH)/bin/arm-none-eabi-objdump
 ARM_SIZE = $(GCC_PATH)/bin/arm-none-eabi-size
 
-# Set the compiler CPU/FPU options.
 CPU = -mthumb -march=armv7-m
 FPU = -mfloat-abi=soft
 
-# General flags
 GENERAL_FLAGS += \
 		$(WARNING_OPTION) \
 		$(OPTIMIZE_OPTION) \
 		-DSTM32L1XX_MD \
 		-DSTM32L151xB
 
-# Compiler flags
 COMPILER_FLAGS += \
 		$(CPU) \
 		$(FPU) \
@@ -66,13 +58,11 @@ COMPILER_FLAGS += \
 		-ffreestanding \
 		-c
 
-# C compiler flags
 CFLAGS += \
 		$(GENERAL_FLAGS) \
 		$(COMPILER_FLAGS) \
 		-std=c99
 
-# Linker flags
 LDFLAGS = $(CPU) $(FPU) \
 		-T$(LDFILE) \
 		-nostartfiles -nostdlib \
@@ -100,20 +90,20 @@ $(OBJECTS_DIR)/%.o: %.c
 
 .PHONY: help
 help:
-	$(Print) "[make]             build firmware"
-	$(Print) "[make flash]       burn firmware via ST-Link"
-	$(Print) "[make flash dev=X] burn firmware via ak-flash (e.g. dev=/dev/ttyUSB0)"
-	$(Print) "[make info]        print SOC, flash and RAM usage"
-	$(Print) "[make clean]       clean build project folder"
+	$(Print) "[make]                       build firmware"
+	$(Print) "[make flash]                 nap qua ST-Link"
+	$(Print) "[make flash dev=/dev/ttyXX]  nap qua UART (AK bootloader)"
+	$(Print) "[make info]                  print SOC, flash and RAM usage"
+	$(Print) "[make clean]                 clean build folder"
 
 .PHONY: flash
 flash: all
 ifdef dev
-	$(Print) "FLASH $(TARGET:.elf=.bin) to target via ak-flash (UART)"
-	ak-flash $(dev) $(TARGET:.elf=.bin) $(FLASH_BASE_ADDR_VAL)
+	$(Print) FLASH via UART $(dev) - $(TARGET:.elf=.bin) to $(APP_START_ADDR_VAL)
+	@ak-flash $(dev) $(TARGET:.elf=.bin) $(APP_START_ADDR_VAL)
 else
-	$(Print) "FLASH $(TARGET:.elf=.bin) to target via ST-Link (SWD)"
-	@$(PROGRAMER_PATH)/STM32_Programmer_CLI -c port=SWD -w $(TARGET:.elf=.bin) $(FLASH_BASE_ADDR_VAL) -v -rst
+	$(Print) FLASH via ST-Link - $(TARGET:.elf=.bin) to $(APP_START_ADDR_VAL)
+	@st-flash --connect-under-reset --reset write $(TARGET:.elf=.bin) $(APP_START_ADDR_VAL)
 endif
 
 .PHONY: clean
@@ -125,8 +115,10 @@ clean:
 info: $(TARGET)
 	@FLASH_USED=`$(ARM_SIZE) -A -d $(TARGET) | awk '$$1==".isr_vector" || $$1==".text" || $$1==".rodata" || $$1==".data" {sum += $$2} END {print sum+0}'`; \
 	RAM_USED=`$(ARM_SIZE) -A -d $(TARGET) | awk '$$1==".data" || $$1==".bss" {sum += $$2} END {print sum+0}'`; \
-	FLASH_PCT=`awk "BEGIN {printf \"%.2f\", ($$FLASH_USED * 100.0) / $(SOC_FLASH_BYTES)}"`; \
+	APP_FLASH_BYTES=$$(( $(SOC_FLASH_BYTES) - ($(APP_START_ADDR_VAL) - $(FLASH_BASE_ADDR_VAL)) )); \
+	FLASH_PCT=`awk "BEGIN {printf \"%.2f\", ($$FLASH_USED * 100.0) / $$APP_FLASH_BYTES}"`; \
 	RAM_PCT=`awk "BEGIN {printf \"%.2f\", ($$RAM_USED * 100.0) / $(SOC_SRAM_BYTES)}"`; \
 	echo "MCU name: $(SOC_NAME)"; \
-	printf -- " - Flash : %d / %d bytes (%s%%)\n" $$FLASH_USED $(SOC_FLASH_BYTES) $$FLASH_PCT; \
-	printf -- " - RAM   : %d / %d bytes (%s%%)\n" $$RAM_USED $(SOC_SRAM_BYTES) $$RAM_PCT
+	printf -- " - Boot reserved : 0x%08X - 0x%08X (%d bytes)\n" $(FLASH_BASE_ADDR_VAL) $$(($(APP_START_ADDR_VAL) - 1)) $$(($(APP_START_ADDR_VAL) - $(FLASH_BASE_ADDR_VAL))); \
+	printf -- " - App flash     : %d / %d bytes (%s%%)\n" $$FLASH_USED $$APP_FLASH_BYTES $$FLASH_PCT; \
+	printf -- " - RAM           : %d / %d bytes (%s%%)\n" $$RAM_USED $(SOC_SRAM_BYTES) $$RAM_PCT
