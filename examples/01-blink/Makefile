@@ -1,5 +1,5 @@
 ##############################################################################
-# Makefile - 00-minimal - STM32L151CBT6
+# Makefile - 01-blink - STM32L151CBT6
 ##############################################################################
 
 # Utilities define
@@ -11,8 +11,8 @@ SOC_FLASH_BYTES     = 131072 # 128KB
 SOC_SRAM_BYTES      = 16384  # 16KB
 FLASH_BASE_ADDR_VAL = 0x08003000
 
-# Name of build target ex: 00-minimal-application.bin
-NAME_MODULE = 00-minimal-application
+# Name of build target ex: 01-blink-application.bin
+NAME_MODULE = 01-blink-application
 PROJECT     = $(NAME_MODULE)
 
 GCC_PATH = /home/phuoc/Workspace/Tools/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux/gcc-arm-none-eabi-10.3-2021.10
