@@ -99,15 +99,20 @@ $(OBJECTS_DIR)/%.o: %.c
 
 .PHONY: help
 help:
-	$(Print) "[make]       build firmware"
-	$(Print) "[make flash] burn firmware via ST-Link"
-	$(Print) "[make info]  print SOC, flash and RAM usage"
-	$(Print) "[make clean] clean build project folder"
+	$(Print) "[make]             build firmware"
+	$(Print) "[make flash]       burn firmware via ST-Link"
+	$(Print) "[make flash dev=X] burn firmware via ak-flash (e.g. dev=/dev/ttyUSB0)"
+	$(Print) "[make info]        print SOC, flash and RAM usage"
+	$(Print) "[make clean]       clean build project folder"
 
 .PHONY: flash
 flash: all
 	$(Print) FLASH $(TARGET:.elf=.bin) to target
+ifdef dev
+	ak-flash $(dev) $(TARGET:.elf=.bin) $(FLASH_BASE_ADDR_VAL)
+else
 	@st-flash --connect-under-reset --reset write $(TARGET:.elf=.bin) $(FLASH_BASE_ADDR_VAL)
+endif
 
 .PHONY: clean
 clean:
