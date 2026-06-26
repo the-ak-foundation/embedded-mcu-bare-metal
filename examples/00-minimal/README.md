@@ -12,9 +12,10 @@ Mục đích của chương trình này nhằm chứng minh chip sống và tool
 ## File
 
 | File | Vai trò |
-| main.c | Đây là startup code gồm có Vector table, Reset_Handler và main() |
-| stm32l151xx.ld | Đây là linker script với kích thước Flash là 128KB (0x08000000) và SRAM là 16KB (0x20000000) |
-| Makefile | File builld và flash firmware |
+|-------|----------|
+| `main.c` | Đây là startup code gồm có Vector table, Reset_Handler và main() |
+| `stm32l151xx.ld` | Đây là linker script với kích thước Flash là 128KB (0x08000000) và SRAM là 16KB (0x20000000) |
+| `Makefile` | File build và flash firmware |
 
 ## Build và flash
 
