@@ -18,10 +18,23 @@ Chương trình này nhằm 2 việc:
 - Cấu hình PB8 thành output
 - Toggle LED bằng BSRR
 
+Trong trường hợp LED nháy chứng tỏ chip đã chạy code mình viết thành công.
+
 ## Phần cứng
 
-Chip: STM32L151 (128KB Flash, 16KB SRAM, Cortex-M3, no FPU)
+Chip: STM32L151CBT6 (116KB Flash, 16KB SRAM, Cortex-M3)
 LED: PB8 (LED_LIFE trên AK Base Kit, active-low — pin LOW thì đèn sáng)
+
+## Memory layout với AK bootloader
+
+0x08000000 ┌──────────────────────┐
+           │  AK bootloader       │  12KB (pre-flash từ nhà sản xuất)
+0x08003000 ├──────────────────────┤
+           │  App (mình ở đây)    │  116KB
+           │                      │
+0x0801FFFF └──────────────────────┘
+
+AK bootloader đã được nạp sẵn trên kit từ nhà sản xuất, chạy 3 giây đầu sau reset để nhận lệnh UART. Nếu không có lệnh thì jump vào app ở 0x08003000 nên app phải link tại 0x08003000 thay vì 0x08000000.
 
 ## File
 
@@ -29,7 +42,7 @@ LED: PB8 (LED_LIFE trên AK Base Kit, active-low — pin LOW thì đèn sáng)
 |---|---|
 | `bm_led_blink.h` | Khai báo các `struct` thanh ghi (GPIO, RCC), địa chỉ base, các định nghĩa bit (`bit defines`) và ánh xạ phần cứng (`LED_PORT`, `LED_PIN`). |
 | `main.c` | Chứa mã khởi động (`vector table`, `Reset_Handler`), hàm `delay()` và `main()` — xử lý logic nhấp nháy LED. |
-| `stm32l151xx.ld` | Linker script định nghĩa vùng nhớ của vi điều khiển: Flash 128 KB tại `0x08000000` và SRAM 16 KB tại `0x20000000`. |
+| `stm32l151xx.ld` | Linker script định nghĩa vùng nhớ của vi điều khiển: Flash 116 KB tại `0x08003000` và SRAM 16 KB tại `0x20000000`. |
 | `Makefile` | Tự động hóa quá trình build và nạp (flash) firmware. |
 
 ## Build và flash
