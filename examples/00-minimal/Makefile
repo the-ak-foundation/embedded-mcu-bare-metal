@@ -4,7 +4,7 @@ OBJECTS_DIR 	= build_$(NAME_MODULE)
 GCC_PATH       = $(HOME)/Workspace/Tools/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux/gcc-arm-none-eabi-10.3-2021.10
 PROGRAMER_PATH = $(HOME)/Workspace/Tools/STM32CubeProgrammer/bin
 
-APP_START_ADDR = 0x08003000
+APP_START_ADDR = 0x08000000
 
 CFLAGS  = -mcpu=cortex-m3 -mthumb -Os -g -Wall -ffreestanding -nostdlib -DAPP_START_ADDR=$(APP_START_ADDR)
 LDFLAGS = -T stm32l151xx.ld -nostdlib -Wl,--gc-sections
@@ -24,11 +24,7 @@ $(BIN): $(ELF)
 	$(GCC_PATH)/bin/arm-none-eabi-objcopy -O binary $< $@
 
 flash: $(BIN)
-ifdef dev
-	ak-flash $(dev) $< $(APP_START_ADDR)
-else
 	$(PROGRAMER_PATH)/STM32_Programmer.sh -c port=SWD -w $< $(APP_START_ADDR) -rst
-endif
 
 clean:
 	rm -rf $(OBJECTS_DIR)

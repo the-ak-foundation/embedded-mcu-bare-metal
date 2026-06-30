@@ -47,9 +47,9 @@ int main(void)
 	for (;;)
 	{
 		GPIOB_BSRR = (1U << LED_PIN);
-		delay(500000);
+		delay(100000);
 		GPIOB_BSRR = (1U << (LED_PIN + 16));
-		delay(500000);
+		delay(100000);
 	}
 	return 0;
 }

@@ -1,5 +1,5 @@
-#ifndef BM_LED_BLINK_H
-#define BM_LED_BLINK_H
+#ifndef __BM_LED_BLINK_H__
+#define __BM_LED_BLINK_H__
 
 #include <stdint.h>
 
@@ -10,4 +10,4 @@
 
 #define LED_PIN 8
 
-#endif
+#endif // __BM_LED_BLINK_H__
