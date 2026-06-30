@@ -3,7 +3,7 @@ monitor reset halt
 load
 monitor reset init
 set pagination off
-break main_app
+break main
 layout src
 focus cmd
 continue
