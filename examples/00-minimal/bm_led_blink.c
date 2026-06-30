@@ -7,8 +7,6 @@ __attribute__((naked, noreturn)) void Reset_Handler(void)
 {
 	extern long _sbss, _ebss, _sdata, _edata, _sidata;
 
-	SCB_VTOR = APP_START_ADDR;
-
 	for (long* dst = &_sbss; dst < &_ebss; dst++)
 	{
 		*dst = 0;
