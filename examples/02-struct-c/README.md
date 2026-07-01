@@ -1,22 +1,22 @@
-# 02-struct-c — Peripheral register access via `typedef struct`
+# 02-struct-c — Peripheral access via `typedef struct`
 
-Blink LED trên PB8 của **AK Embedded Base Kit (STM32L151C8T6)**. **Kết quả giống hệt** [`01-systick-c`](../01-systick-c/), chỉ khác **cách tổ chức register** — thay `#define` từng địa chỉ bằng `typedef struct` + pointer, đúng chuẩn CMSIS.
+Same LED blink as [`01-systick-c`](../01-systick-c/). The only change is how we reach the registers: `typedef struct` + pointer instead of one `#define` per register — the same pattern CMSIS uses.
 
 ## Result
 
-<!-- Chèn video/gif blink LED ở đây (giống 01-systick-c) -->
+<!-- Add LED blink video / gif here -->
 
 ## How it works
 
-Diff duy nhất so với `01-systick-c` nằm ở `led_blink.h` và cú pháp truy cập register trong `led_blink.c`:
+The whole diff lives in `led_blink.h` and the register access syntax in `led_blink.c`.
 
-**Trước (`01-systick-c/led_blink.h`):**
+**Before (`01-systick-c/led_blink.h`):**
 ```c
 #define GPIOB_MODER (*(volatile uint32_t*)0x40020400)
 #define GPIOB_BSRR  (*(volatile uint32_t*)0x40020418)
 ```
 
-**Sau (`02-struct-c/led_blink.h`):**
+**Now (`02-struct-c/led_blink.h`):**
 ```c
 typedef struct {
     volatile uint32_t MODER;   /* 0x00 */
@@ -28,27 +28,26 @@ typedef struct {
 #define GPIOB ((GPIO_TypeDef*)0x40020400UL)
 ```
 
-Truy cập:
+Access:
 ```c
-GPIOB_BSRR = (1U << 8);   // cũ
-GPIOB->BSRR = (1U << 8);  // mới
+GPIOB_BSRR = (1U << 8);   // old
+GPIOB->BSRR = (1U << 8);  // new
 ```
 
-### Cơ chế
-Compiler tự tính offset của field trong struct — miễn thứ tự và kiểu field khớp với bố cục thanh ghi trong datasheet, `GPIOB->BSRR` sẽ được dịch thành `*(uint32_t*)(0x40020400 + 0x18)`. Chính xác cùng địa chỉ như bản `#define`.
+The compiler computes each field offset from the struct. As long as the field order and types match the datasheet layout, `GPIOB->BSRR` compiles to `*(uint32_t*)(0x40020400 + 0x18)` — the exact same address as the `#define` version.
 
-Build + flash + debug:
+Build / flash / debug:
 ```bash
 make && make flash
 make debug
 ```
 
-## Ý nghĩa
+## Meaning
 
-Đây là bước quan trọng chuyển từ "địa chỉ raw" sang "peripheral block". Lợi ích:
+Moving from raw addresses to a peripheral block. Why bother:
 
-- **Scale được** — mỗi peripheral có 10-20 register, viết `#define` từng thanh ghi cho GPIO A/B/C/D/E/F/G/H/I là hàng trăm dòng. Struct chỉ cần 1 định nghĩa, dùng lại cho mọi port.
-- **Tự động khớp offset** — nếu ST đổi vị trí thanh ghi, chỉ cần sửa struct 1 chỗ.
-- **Tương thích chuẩn CMSIS** — các file `stm32l1xx.h` chính chủ ST cũng dùng chính xác pattern này. Bài `04-cmsis-device-c` sẽ chỉ việc thay struct tự viết bằng struct của ST.
+- **Scales.** GPIOA through GPIOI each have around 10 registers. One `GPIO_TypeDef` handles them all instead of hundreds of `#define` lines.
+- **Offsets stay in sync.** If ST changes a layout, we fix one struct instead of hunting down individual `#define`s.
+- **Same style as CMSIS.** The vendor `stm32l1xx.h` uses exactly this pattern, so `04-cmsis-device-c` will just swap our hand-written struct for the ST one.
 
-Các bài sau (`03-cmsis-core-c`, `04-cmsis-device-c`, `05-hal-c`) sẽ tiếp tục leo bậc thang trừu tượng, mỗi lần bỏ bớt một phần mình tự viết.
+The next examples (`03-cmsis-core-c`, `04-cmsis-device-c`, `05-hal-c`) keep climbing the same ladder — each step drops another block of hand-written code.
