@@ -34,7 +34,7 @@ A collection of bare-metal examples for microcontrollers, written with hand-craf
 
 | Board | MCU | Status |
 |-------|-----|--------|
-| [AK Embedded Base Kit](https://epcb.vn/products/ak-embedded-base-kit-lap-trinh-nhung-vi-dieu-khien-mcu) | STM32L151C8T6 (ARM Cortex-M3) | Primary target |
+| [AK Embedded Base Kit](https://epcb.vn/products/ak-embedded-base-kit-lap-trinh-nhung-vi-dieu-khien-mcu) | STM32L151CBT6 (ARM Cortex-M3) | Primary target |
 
 ## Quick start
 
