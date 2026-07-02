@@ -57,8 +57,6 @@ The visible result is the same across every example — this single clip shows w
 | 01 | [`01-systick-c`](examples/01-systick-c/) | SysTick interrupt for millisecond timing |
 | 02 | [`02-struct-c`](examples/02-struct-c/) | `typedef struct` register access (CMSIS-style, still hand-written) |
 
-Planned next: `03-cmsis-core-c`, `04-cmsis-device-c`, `05-hal-c`.
-
 ## Quick start
 
 To build the source and flash firmware onto the kit, you need a Linux development environment. Step-by-step setup instructions:
