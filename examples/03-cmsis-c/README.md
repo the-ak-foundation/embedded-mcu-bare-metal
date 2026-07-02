@@ -64,3 +64,12 @@ This is where the hand-written work pays off. Everything we crafted in `02-struc
 - **Named constants beat raw bits.** `RCC_AHBENR_GPIOBEN` is easier to read than `(1U << 1)` and stays correct if the register layout ever changes.
 
 The next example (`04-hal-c`) climbs one more step: instead of writing register operations by hand, we call HAL functions that wrap them.
+
+## Where the CMSIS headers come from
+
+All 8 files in [`cmsis/`](./cmsis/) are vendored (Apache-2.0). Sources:
+
+- **ARM CMSIS-Core** — `core_cm3.h`, `cmsis_gcc.h`, `cmsis_compiler.h`, `cmsis_version.h`, `mpu_armv7.h`. Upstream at [ARM-software/CMSIS_5](https://github.com/ARM-software/CMSIS_5). Fetched from ST's mirror in [STMicroelectronics/STM32CubeL1](https://github.com/STMicroelectronics/STM32CubeL1) (folder `Drivers/CMSIS/Include/`).
+- **ST CMSIS-Device L1** — `stm32l1xx.h`, `stm32l151xb.h`, `system_stm32l1xx.h`. From [STMicroelectronics/cmsis_device_l1](https://github.com/STMicroelectronics/cmsis_device_l1) (folder `Include/`).
+
+Both packages are officially maintained; the L1 device pack is what ST's STM32CubeMX and STM32CubeIDE also ship, so any pattern learned here transfers directly to a real ST-tooling project.
