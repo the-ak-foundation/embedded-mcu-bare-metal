@@ -42,5 +42,3 @@ Moving from raw addresses to a peripheral block. Why bother:
 - **Scales.** GPIOA through GPIOI each have around 10 registers. One `GPIO_TypeDef` handles them all instead of hundreds of `#define` lines.
 - **Offsets stay in sync.** If ST changes a layout, we fix one struct instead of hunting down individual `#define`s.
 - **Same style as CMSIS.** The vendor `stm32l1xx.h` uses exactly this pattern, so `04-cmsis-device-c` will just swap our hand-written struct for the ST one.
-
-The next examples (`03-cmsis-core-c`, `04-cmsis-device-c`, `05-hal-c`) keep climbing the same ladder — each step drops another block of hand-written code.
