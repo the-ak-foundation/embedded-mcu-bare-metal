@@ -13,7 +13,7 @@ Every example blinks the same LED. Each one changes exactly one technique, so th
 ## Demo
 
 <div align="center">
-  <video src="resources/video/led_blink.mp4" controls width="480"></video>
+  <video src="https://github.com/user-attachments/assets/39f845b1-70a8-48ca-bb93-bfc019553a98" controls width="480"></video>
 </div>
 
 </div>
