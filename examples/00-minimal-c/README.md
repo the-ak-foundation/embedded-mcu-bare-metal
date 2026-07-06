@@ -1,6 +1,6 @@
 # 00-minimal-c — Bare-metal LED blink
 
-Blink an LED on PB8 of the AK Embedded Base Kit (STM32L151CBT6). Everything is written by hand: vector table, `Reset_Handler`, linker script. No HAL, no CMSIS, no ST files.
+Blink an LED on PB8 of the AK Embedded Base Kit (STM32L151CBT6). Everything is written by hand: vector table, Reset_Handler, linker script. No HAL, no CMSIS, no ST files.
 
 Demo clip for the whole series lives in the [root README](../../README.md#demo).
 
