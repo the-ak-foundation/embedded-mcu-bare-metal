@@ -7,9 +7,9 @@ Demo clip for the whole series lives in the [root README](../../README.md#demo).
 ## How it works
 
 1. **Vector table** in `led_blink.c` — two words at `0x0800_0000`: the initial stack pointer and the address of `Reset_Handler`. On reset the CPU loads them into `SP` and `PC`.
-2. **`Reset_Handler`** — zeroes `.bss`, copies `.data` from FLASH to RAM, then calls `main()`.
+2. **Reset_Handler** — zeroes `.bss`, copies `.data` from FLASH to RAM, then calls `main()`.
 3. **Linker script** `stm32l151xx.ld` — declares FLASH (128 KB at `0x0800_0000`) and RAM (16 KB at `0x2000_0000`), puts `.isr_vector` at the start of FLASH, and exports the symbols the startup code needs (`_sbss`, `_ebss`, `_sdata`, `_edata`, `_sidata`).
-4. **`main()`** — turns on the GPIOB clock in `RCC_AHBENR`, sets PB8 to output in `GPIOB_MODER`, toggles it with `GPIOB_BSRR` and a busy-loop delay.
+4. **main()** — turns on the GPIOB clock in `RCC_AHBENR`, sets PB8 to output in `GPIOB_MODER`, toggles it with `GPIOB_BSRR` and a busy-loop delay.
 
 Build / flash / debug:
 ```bash
