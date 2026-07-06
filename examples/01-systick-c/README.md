@@ -16,11 +16,6 @@ Demo clip for the whole series lives in the [root README](../../README.md#demo).
 +};
 ```
 
-```diff
--abcd
-+efgh
-```
-
 **Delay** — busy-loop `nop` → SysTick tick counter:
 ```diff
 -static void delay(volatile uint32_t count) { while (count--) __asm__("nop"); }
