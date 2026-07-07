@@ -1,18 +1,22 @@
-# 02-register-access-c — Ways to declare registers in header
+# 02-register-access-c - Macro vs struct register access
 
-Same LED blink on PB8 with SysTick timing. Two variants live side by side, differing only in how peripheral registers are declared in the header:
+Blink LED PB8 with SysTick timing.
 
-- `macro/` — one `#define` per register.
-- `struct/` — one `typedef struct` per peripheral plus a base pointer.
+This example keeps the same behavior as `01-systick-c`. The only change is how the hardware registers are declared and accessed.
 
-The `.c` file is the same in both, apart from register-access syntax.
+Two variants are provided:
+
+- `macro/` uses one `#define` per register.
+- `struct/` uses one `typedef struct` per peripheral, plus a base pointer.
+
+No HAL. No CMSIS. No ST startup files.
 
 Demo clip for the whole series lives in the [root README](../../README.md#demo).
 
 ## Layout
 
-```
-01-register-access-c/
+```text
+02-register-access-c/
 ├── macro/
 │   ├── led_blink.c
 │   ├── led_blink.h
@@ -28,81 +32,112 @@ Demo clip for the whole series lives in the [root README](../../README.md#demo).
 └── README.md
 ```
 
-Each folder is self-contained. `cd` into it and build like [`00-minimal-c`](../00-minimal-c/).
+Each folder is self-contained.
 
-## macro vs struct
+## Diff From 01-Systick-C
 
-Header — one `#define` per register vs. one struct per peripheral:
-```diff
--#define GPIOB_MODER (*(volatile uint32_t*)0x40020400)
--#define GPIOB_ODR   (*(volatile uint32_t*)0x40020414)
-+typedef struct {
-+    volatile uint32_t MODER;   // 0x00
-+    volatile uint32_t OTYPER;  // 0x04
-+    // ...
-+    volatile uint32_t ODR;     // 0x14
-+} GPIO_TypeDef;
-+#define GPIOB ((GPIO_TypeDef*)0x40020400UL)
+`01-systick-c` uses flat register macros:
+
+```c
+#define RCC_AHBENR  (*(volatile uint32_t*)0x4002381C)
+#define GPIOB_MODER (*(volatile uint32_t*)0x40020400)
+#define GPIOB_ODR   (*(volatile uint32_t*)0x40020414)
+
+#define SYST_CSR (*(volatile uint32_t*)0xE000E010)
+#define SYST_RVR (*(volatile uint32_t*)0xE000E014)
+#define SYST_CVR (*(volatile uint32_t*)0xE000E018)
 ```
 
-Access — flat name vs. arrow through the struct:
-```diff
--GPIOB_ODR ^= (1U << LED_PIN);
-+GPIOB->ODR ^= (1U << LED_PIN);
+The `macro/` variant keeps that style.
+
+The `struct/` variant groups registers by peripheral:
+
+```c
+typedef struct
+{
+    volatile uint32_t MODER;
+    volatile uint32_t OTYPER;
+    volatile uint32_t OSPEEDR;
+    volatile uint32_t PUPDR;
+    volatile uint32_t IDR;
+    volatile uint32_t ODR;
+} GPIO_TypeDef;
+
+#define GPIOB ((GPIO_TypeDef*)0x40020400UL)
 ```
 
-`GPIOB->ODR` resolves to `0x40020400 + 0x14` — the same address as `GPIOB_ODR`. Both produce the same binary. The struct pattern is what CMSIS uses.
+Then register access changes from a flat macro:
 
-## Diff from 00-minimal-c
-
-**Vector table** — 2 slots → 16, `SysTick_Handler` at [15]:
-```diff
--void (*const g_pfnVectors[2])(void) = { _estack, Reset_Handler };
-+void (*const g_pfnVectors[16])(void) = {
-+    _estack, Reset_Handler,
-+    /* [2..14] unused */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-+    SysTick_Handler,
-+};
+```c
+GPIOB_ODR ^= (1U << LED_PIN);
 ```
 
-**Delay** — busy-loop `nop` → SysTick tick counter:
-```diff
--static void delay(volatile uint32_t count) { while (count--) __asm__("nop"); }
-+volatile uint32_t g_tick;
-+void SysTick_Handler(void) { g_tick++; }
+to a field access through the peripheral pointer:
+
+```c
+GPIOB->ODR ^= (1U << LED_PIN);
 ```
 
-**`main()`** — added SysTick setup, then toggle ODR based on `g_tick`:
-```diff
-+SYST_RVR = (SYSCLK_HZ / TICK_HZ) - 1U;
-+SYST_CVR = 0U;
-+SYST_CSR = (1U << 0) | (1U << 1) | (1U << 2);
-+
-+uint32_t last_tick = g_tick;
-+for (;;) {
-+    if (g_tick - last_tick >= 100) {
-+        last_tick = g_tick;
-+        GPIOB_ODR ^= (1U << LED_PIN);
-+    }
-+}
+Both forms access the same address:
+
+```text
+GPIOB base address = 0x40020400
+ODR offset         = 0x14
+GPIOB->ODR         = 0x40020414
+GPIOB_ODR          = 0x40020414
 ```
 
-## How it works
+## Macro Variant
 
-Reuses everything from [`00-minimal-c`](../00-minimal-c/) (vector table, `Reset_Handler`, linker script, memory-mapped I/O). What's new:
+The `macro/` version declares each register as a direct memory address.
 
-1. **Vector table grows from 2 to 16 entries.** Slot `[15]` holds `SysTick_Handler` — that slot is fixed by the ARM architecture.
-2. **SysTick registers** at `0xE000_E010`:
-   - `SYST_RVR = SYSCLK_HZ / TICK_HZ - 1 = 2096` → interrupt every 1 ms (MSI is 2.097 MHz by default).
-   - `SYST_CSR = 0b111` → enable counter, enable interrupt, use SYSCLK.
-3. **`SysTick_Handler`** increments `volatile uint32_t g_tick` every 1 ms.
-4. **Toggle loop** checks `g_tick - last_tick >= 100`. Unsigned subtraction stays correct when the counter wraps.
-5. **`main()`** sets up GPIO and SysTick, then runs the toggle loop.
+Example:
 
-## Build / flash / debug
+```c
+#define GPIOB_ODR (*(volatile uint32_t*)0x40020414)
+```
+
+Usage:
+
+```c
+GPIOB_ODR ^= (1U << LED_PIN);
+```
+
+This is simple and direct. It is easy to see the exact address used by each register.
+
+## Struct Variant
+
+The `struct/` version declares the register layout once, then maps it to the peripheral base address.
+
+Example:
+
+```c
+#define GPIOB ((GPIO_TypeDef*)0x40020400UL)
+```
+
+Usage:
+
+```c
+GPIOB->ODR ^= (1U << LED_PIN);
+```
+
+The compiler calculates the final address from the base address plus the field offset.
+
+## Build / Flash / Debug
+
+Build the macro version:
 
 ```bash
-cd macro          # or `cd struct`
+cd macro
+make
+make flash
+make debug
+```
+
+Build the struct version:
+
+```bash
+cd struct
 make
 make flash
 make debug
@@ -110,12 +145,10 @@ make debug
 
 ## Meaning
 
-First example with an interrupt. Instead of "how many nops equals 100 ms?" we get real time. Introduces three things:
+This example separates register access style from program behavior.
 
-- The Cortex-M exception mechanism (CPU saves context and jumps to ISR).
-- Timing that doesn't depend on CPU frequency or optimizer choices.
-- Sharing data between an ISR and `main()` — hence `volatile` on `g_tick`.
+The LED blink logic is the same in both folders. The startup code, vector table, linker script, SysTick setup, and main loop stay the same.
 
-Every peripheral we touch later (UART, timers, ADC) reuses the same pattern: enable clock, configure registers, handle interrupt via the vector table.
+Only the register declarations change.
 
-The `macro/` vs `struct/` split shows two ways to declare peripherals. The next example uses the struct style, from CMSIS.
+The `struct/` style is the pattern used by CMSIS device headers. The next example replaces these hand-written structs with the vendor CMSIS headers.
