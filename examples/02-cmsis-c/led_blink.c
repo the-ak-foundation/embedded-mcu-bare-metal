@@ -49,27 +49,22 @@ __attribute__((section(".isr_vector"))) void (*const g_pfnVectors[16])(void) = {
     SysTick_Handler,
 };
 
-static void delay_ms(uint32_t ms)
-{
-	uint32_t start = g_tick;
-	while ((g_tick - start) < ms)
-	{
-	}
-}
-
 int main(void)
 {
-	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;    // ST-provided constant for GPIOB clock enable
+	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
 	GPIOB->MODER |= (1U << (LED_PIN * 2));
 
-	SysTick_Config(SYSCLK_HZ / TICK_HZ);  // 3 lines of manual setup → 1 call from core_cm3.h
+	SysTick_Config(SYSCLK_HZ / TICK_HZ);
+
+	uint32_t last_tick = g_tick;
 
 	for (;;)
 	{
-		GPIOB->BSRR = (1U << LED_PIN);
-		delay_ms(100);
-		GPIOB->BSRR = (1U << (LED_PIN + 16));
-		delay_ms(100);
+		if (g_tick - last_tick >= 100)
+		{
+			last_tick = g_tick;
+			GPIOB->ODR ^= (1U << LED_PIN);
+		}
 	}
 	return 0;
 }
