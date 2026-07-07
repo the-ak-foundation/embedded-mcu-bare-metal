@@ -43,8 +43,8 @@ typedef struct
 	volatile uint32_t SYST_CALIB; // 0x0C: Calibration Value Register
 } SysTick_TypeDef;
 
-#define GPIOB   ((GPIO_TypeDef*)0x40020400UL)
-#define RCC     ((RCC_TypeDef*)0x40023800UL)
+#define GPIOB ((GPIO_TypeDef*)0x40020400UL)
+#define RCC ((RCC_TypeDef*)0x40023800UL)
 #define SysTick ((SysTick_TypeDef*)0xE000E010UL)
 
 // LED pin configuration

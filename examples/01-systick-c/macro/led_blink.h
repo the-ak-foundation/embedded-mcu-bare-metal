@@ -10,7 +10,7 @@
 #define GPIOB_MODER (*(volatile uint32_t*)0x40020400)
 #define GPIOB_ODR (*(volatile uint32_t*)0x40020414)
 
-// Cortex-M3 SysTick registers — ARMv7-M ARM DDI0403E.e, B3.3.2, Table B3-7
+// Cortex-M3 SysTick registers (ARMv7-M B3.3.2)
 //   SYST_CSR at 0xE000E010
 //   SYST_RVR at 0xE000E014
 //   SYST_CVR at 0xE000E018

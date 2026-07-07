@@ -1,4 +1,4 @@
-NAME_MODULE	= led_blink
+NAME_MODULE		= led_blink
 OBJECTS_DIR 	= build_$(NAME_MODULE)
 
 GCC_PATH       		= $(HOME)/Workspace/Tools/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux/gcc-arm-none-eabi-10.3-2021.10
