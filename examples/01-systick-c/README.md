@@ -74,9 +74,9 @@ Access — flat name vs. arrow through the struct:
 
 **`main()`** — added SysTick setup, then toggle ODR based on `g_tick`:
 ```diff
-+SYSTICK_LOAD = (SYSCLK_HZ / TICK_HZ) - 1U;
-+SYSTICK_VAL  = 0U;
-+SYSTICK_CTRL = (1U << 0) | (1U << 1) | (1U << 2);
++SYST_RVR = (SYSCLK_HZ / TICK_HZ) - 1U;
++SYST_CVR = 0U;
++SYST_CSR = (1U << 0) | (1U << 1) | (1U << 2);
 +
 +uint32_t last_tick = g_tick;
 +for (;;) {
@@ -93,8 +93,8 @@ Reuses everything from [`00-minimal-c`](../00-minimal-c/) (vector table, `Reset_
 
 1. **Vector table grows from 2 to 16 entries.** Slot `[15]` holds `SysTick_Handler` — that slot is fixed by the ARM architecture.
 2. **SysTick registers** at `0xE000_E010`:
-   - `LOAD = SYSCLK_HZ / TICK_HZ - 1 = 2096` → interrupt every 1 ms (MSI is 2.097 MHz by default).
-   - `CTRL = 0b111` → enable counter, enable interrupt, use SYSCLK.
+   - `SYST_RVR = SYSCLK_HZ / TICK_HZ - 1 = 2096` → interrupt every 1 ms (MSI is 2.097 MHz by default).
+   - `SYST_CSR = 0b111` → enable counter, enable interrupt, use SYSCLK.
 3. **`SysTick_Handler`** increments `volatile uint32_t g_tick` every 1 ms.
 4. **Toggle loop** checks `g_tick - last_tick >= 100`. Unsigned subtraction stays correct when the counter wraps.
 5. **`main()`** sets up GPIO and SysTick, then runs the toggle loop.

@@ -54,9 +54,9 @@ int main(void)
 	RCC_AHBENR |= (1U << 1);
 	GPIOB_MODER |= (1U << (LED_PIN * 2));
 
-	SYSTICK_LOAD = (SYSCLK_HZ / TICK_HZ) - 1U;
-	SYSTICK_VAL = 0U;
-	SYSTICK_CTRL = (1U << 0) | (1U << 1) | (1U << 2);
+	SYST_RVR = (SYSCLK_HZ / TICK_HZ) - 1U;
+	SYST_CVR = 0U;
+	SYST_CSR = (1U << 0) | (1U << 1) | (1U << 2);
 
 	uint32_t last_tick = g_tick;
 

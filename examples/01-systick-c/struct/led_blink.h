@@ -34,13 +34,13 @@ typedef struct
 	volatile uint32_t AHBENR;   // 0x1C: AHB peripheral clock enable
 } RCC_TypeDef;
 
-// Cortex-M3 SysTick — layout from ARMv7-M ARM B3.3 (SysTick base = 0xE000E010)
+// Cortex-M3 SysTick — ARMv7-M ARM DDI0403E.e, B3.3.2, Table B3-7
 typedef struct
 {
-	volatile uint32_t CTRL;  // 0x00
-	volatile uint32_t LOAD;  // 0x04
-	volatile uint32_t VAL;   // 0x08
-	volatile uint32_t CALIB; // 0x0C
+	volatile uint32_t SYST_CSR;   // 0x00: Control and Status Register
+	volatile uint32_t SYST_RVR;   // 0x04: Reload Value Register
+	volatile uint32_t SYST_CVR;   // 0x08: Current Value Register
+	volatile uint32_t SYST_CALIB; // 0x0C: Calibration Value Register
 } SysTick_TypeDef;
 
 #define GPIOB   ((GPIO_TypeDef*)0x40020400UL)
