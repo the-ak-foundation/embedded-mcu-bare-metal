@@ -36,46 +36,75 @@ Each folder is self-contained.
 
 ## Diff From 01-Systick-C
 
-`01-systick-c` uses flat register macros:
+`01-systick-c` declares each register as a flat macro. The `struct/` variant groups registers by peripheral instead.
 
-```c
-#define RCC_AHBENR  (*(volatile uint32_t*)0x4002381C)
-#define GPIOB_MODER (*(volatile uint32_t*)0x40020400)
-#define GPIOB_ODR   (*(volatile uint32_t*)0x40020414)
-
-#define SYST_CSR (*(volatile uint32_t*)0xE000E010)
-#define SYST_RVR (*(volatile uint32_t*)0xE000E014)
-#define SYST_CVR (*(volatile uint32_t*)0xE000E018)
+```diff
+-#define GPIOB_MODER (*(volatile uint32_t*)0x40020400)
+-#define GPIOB_ODR   (*(volatile uint32_t*)0x40020414)
++typedef struct
++{
++    volatile uint32_t MODER;
++    volatile uint32_t OTYPER;
++    volatile uint32_t OSPEEDR;
++    volatile uint32_t PUPDR;
++    volatile uint32_t IDR;
++    volatile uint32_t ODR;
++} GPIO_TypeDef;
++
++#define GPIOB ((GPIO_TypeDef*)0x40020400UL)
 ```
 
-The `macro/` variant keeps that style.
+The same change is used for RCC:
 
-The `struct/` variant groups registers by peripheral:
-
-```c
-typedef struct
-{
-    volatile uint32_t MODER;
-    volatile uint32_t OTYPER;
-    volatile uint32_t OSPEEDR;
-    volatile uint32_t PUPDR;
-    volatile uint32_t IDR;
-    volatile uint32_t ODR;
-} GPIO_TypeDef;
-
-#define GPIOB ((GPIO_TypeDef*)0x40020400UL)
+```diff
+-#define RCC_AHBENR (*(volatile uint32_t*)0x4002381C)
++typedef struct
++{
++    volatile uint32_t CR;
++    volatile uint32_t ICSCR;
++    volatile uint32_t CFGR;
++    volatile uint32_t CIR;
++    volatile uint32_t AHBRSTR;
++    volatile uint32_t APB2RSTR;
++    volatile uint32_t APB1RSTR;
++    volatile uint32_t AHBENR;
++} RCC_TypeDef;
++
++#define RCC ((RCC_TypeDef*)0x40023800UL)
 ```
 
-Then register access changes from a flat macro:
+And for SysTick:
 
-```c
-GPIOB_ODR ^= (1U << LED_PIN);
+```diff
+-#define SYST_CSR (*(volatile uint32_t*)0xE000E010)
+-#define SYST_RVR (*(volatile uint32_t*)0xE000E014)
+-#define SYST_CVR (*(volatile uint32_t*)0xE000E018)
++typedef struct
++{
++    volatile uint32_t SYST_CSR;
++    volatile uint32_t SYST_RVR;
++    volatile uint32_t SYST_CVR;
++    volatile uint32_t SYST_CALIB;
++} SysTick_TypeDef;
++
++#define SysTick ((SysTick_TypeDef*)0xE000E010UL)
 ```
 
-to a field access through the peripheral pointer:
+Register access also changes:
 
-```c
-GPIOB->ODR ^= (1U << LED_PIN);
+```diff
+-RCC_AHBENR |= (1U << 1);
+-GPIOB_MODER |= (1U << (LED_PIN * 2));
+-SYST_RVR = (SYSCLK_HZ / TICK_HZ) - 1U;
+-SYST_CVR = 0U;
+-SYST_CSR = (1U << 0) | (1U << 1) | (1U << 2);
+-GPIOB_ODR ^= (1U << LED_PIN);
++RCC->AHBENR |= (1U << 1);
++GPIOB->MODER |= (1U << (LED_PIN * 2));
++SysTick->SYST_RVR = (SYSCLK_HZ / TICK_HZ) - 1U;
++SysTick->SYST_CVR = 0U;
++SysTick->SYST_CSR = (1U << 0) | (1U << 1) | (1U << 2);
++GPIOB->ODR ^= (1U << LED_PIN);
 ```
 
 Both forms access the same address:
@@ -93,14 +122,9 @@ The `macro/` version declares each register as a direct memory address.
 
 Example:
 
-```c
-#define GPIOB_ODR (*(volatile uint32_t*)0x40020414)
-```
-
-Usage:
-
-```c
-GPIOB_ODR ^= (1U << LED_PIN);
+```diff
++#define GPIOB_ODR (*(volatile uint32_t*)0x40020414)
++GPIOB_ODR ^= (1U << LED_PIN);
 ```
 
 This is simple and direct. It is easy to see the exact address used by each register.
@@ -111,14 +135,9 @@ The `struct/` version declares the register layout once, then maps it to the per
 
 Example:
 
-```c
-#define GPIOB ((GPIO_TypeDef*)0x40020400UL)
-```
-
-Usage:
-
-```c
-GPIOB->ODR ^= (1U << LED_PIN);
+```diff
++#define GPIOB ((GPIO_TypeDef*)0x40020400UL)
++GPIOB->ODR ^= (1U << LED_PIN);
 ```
 
 The compiler calculates the final address from the base address plus the field offset.
