@@ -32,6 +32,7 @@ flash: $(BIN)
 
 debug: $(ELF)
 	xterm -e openocd -f $(OPENOCD_CFG_PATH) &
+	sleep 1
 ifeq ($(gdb),ddd)
 	ddd --debugger $(ARM_GDB) --command=stm32l_init.gdb $(ELF)
 else

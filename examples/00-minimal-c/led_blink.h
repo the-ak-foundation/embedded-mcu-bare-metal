@@ -4,7 +4,6 @@
 #include <stdint.h>
 
 // STM32 peripherals — each address = peripheral BASE + register OFFSET (RM0038)
-//
 // RCC base   = 0x40023800   → AHBENR at offset 0x1C → 0x4002381C (RM0038 6.3.8)
 // GPIOB base = 0x40020400   → MODER  at offset 0x00 → 0x40020400 (RM0038 7.4.1)
 //                             BSRR   at offset 0x18 → 0x40020418 (RM0038 7.4.7)
