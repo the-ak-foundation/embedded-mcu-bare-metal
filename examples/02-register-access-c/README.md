@@ -36,6 +36,8 @@ Each folder is self-contained.
 
 ## Diff From 01-Systick-C
 
+The `macro/` folder is a copy of `01-systick-c`. It is kept here as the baseline so the two register styles sit side by side. All diffs below are between `01-systick-c` and the `struct/` variant.
+
 `01-systick-c` declares each register as a flat macro. The `struct/` variant groups registers by peripheral instead.
 
 ```diff
@@ -118,7 +120,7 @@ GPIOB_ODR          = 0x40020414
 
 ## Macro Variant
 
-The `macro/` version declares each register as a direct memory address.
+The `macro/` version declares each register as a direct memory address. The files in `macro/` match `01-systick-c` line for line.
 
 Example:
 
