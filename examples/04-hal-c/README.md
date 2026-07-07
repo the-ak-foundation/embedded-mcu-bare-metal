@@ -10,7 +10,7 @@ Demo clip for the whole series lives in the [root README](../../README.md#demo).
 
 ## Diff From 03-CMSIS-C
 
-Clock enable, GPIO config, and SysTick setup all become HAL calls:
+Clock enable, GPIO config, and SysTick setup are replaced by HAL calls:
 
 ```diff
 -RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
@@ -69,7 +69,7 @@ The HAL sources are vendored in [`hal/`](./hal/). Five `.c` files are compiled:
 | `stm32l1xx_hal_cortex.c` | `HAL_NVIC_SetPriority` called by `HAL_Init` |
 | `system_stm32l1xx.c` | `SystemCoreClock` (2 097 000 Hz, MSI default) |
 
-Their headers, plus a few pulled in by the RCC code (`flash`, `pwr`, `Legacy/`), are vendored next to them. `stm32l1xx_hal_conf.h` is the ST template with 25 unused modules commented out.
+Their headers, plus a few included by the RCC code (`flash`, `pwr`, `Legacy/`), are vendored next to them. `stm32l1xx_hal_conf.h` is the ST template with 25 unused modules commented out.
 
 The CMSIS files under [`cmsis/`](./cmsis/) are the same as in `03-cmsis-c`.
 
@@ -79,7 +79,7 @@ The CMSIS files under [`cmsis/`](./cmsis/) are the same as in `03-cmsis-c`.
 
 `SysTick_Handler` calls `HAL_IncTick`, which increments `uwTick` inside `stm32l1xx_hal.c`.
 
-`HAL_Delay(100)` waits until `uwTick` has advanced 100 ms.
+`HAL_Delay(TICK_MS)` waits until `uwTick` has advanced `TICK_MS` ms.
 
 ## Build / Flash / Debug
 
