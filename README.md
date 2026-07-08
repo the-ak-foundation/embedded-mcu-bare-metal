@@ -83,7 +83,7 @@ Once the toolchain is ready, each example builds the same way:
 ```bash
 cd compiler/00-startup-c
 make          # build .elf and .bin
-make flash    # program via ST-Link
+make flash    # flash to board
 make debug    # openocd + arm-none-eabi-gdb
 ```
 
