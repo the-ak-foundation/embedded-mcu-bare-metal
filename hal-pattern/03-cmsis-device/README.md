@@ -1,14 +1,14 @@
-# 03-cmsis-c - CMSIS device headers
+# 03-cmsis-device - CMSIS device headers
 
 Blink LED PB8 with SysTick timing.
 
-This example keeps the same behavior as [`02-register-access-c/struct`](../02-register-access-c/struct/). The hand-written peripheral structs are replaced by CMSIS headers from ARM and ST.
+This example keeps the same behavior as [`02-register-struct`](../02-register-struct/). The hand-written peripheral structs are replaced by CMSIS headers from ARM and ST.
 
 No HAL. No ST startup files.
 
 Demo clip for the whole series lives in the [root README](../../README.md#demo).
 
-## Diff From 02-Register-Access-C/Struct
+## Diff From 02-Register-Struct
 
 The hand-written register structs and base pointers are replaced by one include:
 
@@ -97,7 +97,7 @@ The CMSIS files are vendored in [`cmsis/`](./cmsis/).
 
 That selects `stm32l151xb.h`.
 
-`stm32l151xb.h` defines the same kind of register structs used in `02-register-access-c/struct`, but for the full chip.
+`stm32l151xb.h` defines the same kind of register structs used in `02-register-struct`, but for the full chip.
 
 Examples:
 

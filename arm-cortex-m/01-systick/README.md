@@ -1,16 +1,16 @@
-# 01-systick-c - SysTick LED blink
+# 01-systick - SysTick LED blink
 
-Blink LED PB8 on STM32L151CBT6 using SysTick. This example keeps the same startup code, linker script, and raw register access from `00-minimal-c`. The vector table grows from 2 entries to 16 to hold the SysTick slot, and the busy-loop delay is replaced by a 1 ms SysTick interrupt.
+Blink LED PB8 on STM32L151CBT6 using SysTick. This example keeps the same startup code, linker script, and raw register access from [`compiler/01-startup-c`](../../compiler/01-startup-c/). The vector table grows from 2 entries to 16 to hold the SysTick slot, and the busy-loop delay is replaced by a 1 ms SysTick interrupt.
 
 No HAL. No CMSIS. No ST startup files.
 
 Demo clip for the whole series lives in the [root README](../../README.md#demo).
 
-## What Changed From 00-Minimal-C
+## What Changed From 01-Startup-C
 
 ### Vector Table
 
-`00-minimal-c` only needs two entries:
+`01-startup-c` only needs two entries:
 
 ```c
 _estack,
@@ -120,4 +120,4 @@ make debug
 
 This example introduces the first interrupt in the series.
 
-`00-minimal-c` uses a busy-loop delay. This example uses SysTick, so timing no longer depends on the number of `nop` instructions or compiler optimization.
+`01-startup-c` uses a busy-loop delay. This example uses SysTick, so timing no longer depends on the number of `nop` instructions or compiler optimization.

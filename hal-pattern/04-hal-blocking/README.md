@@ -1,14 +1,14 @@
-# 04-hal-c - HAL layer
+# 04-hal-blocking - HAL layer
 
 Blink LED PB8 with SysTick timing.
 
-This example keeps the same behavior as [`03-cmsis-c`](../03-cmsis-c/). Direct register access is replaced by HAL function calls from ST.
+This example keeps the same behavior as [`03-cmsis-device`](../03-cmsis-device/). Direct register access is replaced by HAL function calls from ST.
 
 No ST startup files.
 
 Demo clip for the whole series lives in the [root README](../../README.md#demo).
 
-## Diff From 03-CMSIS-C
+## Diff From 03-CMSIS-Device
 
 Clock enable, GPIO config, and SysTick setup are replaced by HAL calls:
 
@@ -71,7 +71,7 @@ The HAL sources are vendored in [`hal/`](./hal/), copied from ST's [`stm32l1xx_h
 
 Their headers, plus a few included by the RCC code (`flash`, `pwr`, `Legacy/`), are vendored next to them. `stm32l1xx_hal_conf.h` is the ST template with 25 unused modules commented out.
 
-The CMSIS files under [`cmsis/`](./cmsis/) are the same as in `03-cmsis-c`.
+The CMSIS files under [`cmsis/`](./cmsis/) are the same as in `03-cmsis-device`.
 
 ## How It Works
 
