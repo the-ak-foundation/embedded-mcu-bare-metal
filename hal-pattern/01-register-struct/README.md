@@ -6,7 +6,7 @@ Register access groups registers by peripheral into a `typedef struct`, then map
 
 Same behavior as [`arm-cortex-m/00-systick/`](../../arm-cortex-m/00-systick/) and [`00-register-macro/`](../00-register-macro/). The difference is only in how registers are declared and used.
 
-Demo clip for the whole series lives in the [root README](../../README.md#demo).
+Demo clip for every example lives in the [root README](../../README.md#demo).
 
 ## Register declarations
 

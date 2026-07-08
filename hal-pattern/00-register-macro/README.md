@@ -6,7 +6,7 @@ Register access uses one `#define` per register, each mapped to a raw memory add
 
 Same behavior as [`arm-cortex-m/00-systick/`](../../arm-cortex-m/00-systick/). The difference is only in how registers are declared and used.
 
-Demo clip for the whole series lives in the [root README](../../README.md#demo).
+Demo clip for every example lives in the [root README](../../README.md#demo).
 
 ## Register declarations
 

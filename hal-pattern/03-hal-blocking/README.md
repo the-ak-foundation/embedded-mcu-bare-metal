@@ -6,7 +6,7 @@ This example keeps the same behavior as [`02-cmsis-device`](../02-cmsis-device/)
 
 No ST startup files.
 
-Demo clip for the whole series lives in the [root README](../../README.md#demo).
+Demo clip for every example lives in the [root README](../../README.md#demo).
 
 ## Diff From 02-CMSIS-Device
 

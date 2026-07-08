@@ -4,7 +4,7 @@ Blink LED PB8 with `HAL_GetTick` instead of `HAL_Delay`.
 
 This example keeps the same behavior as [`03-hal-blocking`](../03-hal-blocking/). The main loop is non-blocking, so it can do other work between toggles.
 
-Demo clip for the whole series lives in the [root README](../../README.md#demo).
+Demo clip for every example lives in the [root README](../../README.md#demo).
 
 ## Diff From 03-Hal-Blocking
 

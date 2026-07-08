@@ -6,7 +6,7 @@ This example keeps the same behavior as [`01-register-struct`](../01-register-st
 
 No HAL. No ST startup files.
 
-Demo clip for the whole series lives in the [root README](../../README.md#demo).
+Demo clip for every example lives in the [root README](../../README.md#demo).
 
 ## Diff From 01-Register-Struct
 

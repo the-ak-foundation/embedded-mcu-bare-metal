@@ -4,7 +4,7 @@ Blink LED PB8 on STM32L151CBT6 using SysTick. This example keeps the same startu
 
 No HAL. No CMSIS. No ST startup files.
 
-Demo clip for the whole series lives in the [root README](../../README.md#demo).
+Demo clip for every example lives in the [root README](../../README.md#demo).
 
 ## What Changed From 00-Startup-C
 
