@@ -54,23 +54,23 @@ The result is the same across every example — this single clip shows what "it 
 
 | Folder | Concept |
 |--------|---------|
-| [`01-startup-c/`](compiler/01-startup-c/) | Linker script and C `Reset_Handler` |
+| [`00-startup-c/`](compiler/00-startup-c/) | Linker script and C `Reset_Handler` |
 
 ### [`arm-cortex-m/`](arm-cortex-m/)
 
 | Folder | Concept |
 |--------|---------|
-| [`01-systick/`](arm-cortex-m/01-systick/) | 1 ms SysTick tick and interrupt |
+| [`00-systick/`](arm-cortex-m/00-systick/) | 1 ms SysTick tick and interrupt |
 
 ### [`hal-pattern/`](hal-pattern/)
 
 | Folder | Concept |
 |--------|---------|
-| [`01-register-macro/`](hal-pattern/01-register-macro/) | Macro-based register access |
-| [`02-register-struct/`](hal-pattern/02-register-struct/) | Struct-based register access |
-| [`03-cmsis-device/`](hal-pattern/03-cmsis-device/) | CMSIS-Device vendor headers |
-| [`04-hal-blocking/`](hal-pattern/04-hal-blocking/) | HAL with blocking `HAL_Delay` |
-| [`05-hal-nonblocking/`](hal-pattern/05-hal-nonblocking/) | HAL with non-blocking `HAL_GetTick` |
+| [`00-register-macro/`](hal-pattern/00-register-macro/) | Macro-based register access |
+| [`01-register-struct/`](hal-pattern/01-register-struct/) | Struct-based register access |
+| [`02-cmsis-device/`](hal-pattern/02-cmsis-device/) | CMSIS-Device vendor headers |
+| [`03-hal-blocking/`](hal-pattern/03-hal-blocking/) | HAL with blocking `HAL_Delay` |
+| [`04-hal-nonblocking/`](hal-pattern/04-hal-nonblocking/) | HAL with non-blocking `HAL_GetTick` |
 
 ## Quick start
 
@@ -81,7 +81,7 @@ To build the source and flash firmware onto the kit, you need a Linux developmen
 Once the toolchain is ready, each example builds the same way:
 
 ```bash
-cd compiler/01-startup-c
+cd compiler/00-startup-c
 make          # build .elf and .bin
 make flash    # program via ST-Link
 make debug    # openocd + arm-none-eabi-gdb

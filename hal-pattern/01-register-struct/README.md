@@ -1,10 +1,10 @@
-# 02-register-struct - Register access with `typedef struct`
+# 01-register-struct - Register access with `typedef struct`
 
 Blink LED PB8 with SysTick timing (1 ms tick).
 
 Register access groups registers by peripheral into a `typedef struct`, then maps the peripheral base address to a pointer of that struct type.
 
-Same behavior as [`arm-cortex-m/01-systick/`](../../arm-cortex-m/01-systick/) and [`01-register-macro/`](../01-register-macro/). The difference is only in how registers are declared and used.
+Same behavior as [`arm-cortex-m/00-systick/`](../../arm-cortex-m/00-systick/) and [`00-register-macro/`](../00-register-macro/). The difference is only in how registers are declared and used.
 
 Demo clip for the whole series lives in the [root README](../../README.md#demo).
 
@@ -38,7 +38,7 @@ GPIOB->MODER |= (1U << (LED_PIN * 2));
 GPIOB->ODR ^= (1U << LED_PIN);
 ```
 
-The compiler computes `GPIOB->ODR` as `base + offsetof(GPIO_TypeDef, ODR)` = `0x40020400 + 0x14` = `0x40020414` — the same address as `01-register-macro`.
+The compiler computes `GPIOB->ODR` as `base + offsetof(GPIO_TypeDef, ODR)` = `0x40020400 + 0x14` = `0x40020414` — the same address as `00-register-macro`.
 
 ## Build / Flash / Debug
 
@@ -52,6 +52,6 @@ make debug
 
 The struct captures the memory layout of the peripheral once. Every register on that peripheral is a field on the same base pointer.
 
-Same pattern used by CMSIS device headers — see [`03-cmsis-device/`](../03-cmsis-device/), where these hand-written structs are replaced by ST's `stm32l151xb.h`.
+Same pattern used by CMSIS device headers — see [`02-cmsis-device/`](../02-cmsis-device/), where these hand-written structs are replaced by ST's `stm32l151xb.h`.
 
-Compare with [`01-register-macro/`](../01-register-macro/), which declares each register as a separate `#define` at a hard-coded address.
+Compare with [`00-register-macro/`](../00-register-macro/), which declares each register as a separate `#define` at a hard-coded address.

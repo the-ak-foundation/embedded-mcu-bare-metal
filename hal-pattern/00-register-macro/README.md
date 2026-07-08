@@ -1,10 +1,10 @@
-# 01-register-macro - Register access with `#define` macros
+# 00-register-macro - Register access with `#define` macros
 
 Blink LED PB8 with SysTick timing (1 ms tick).
 
 Register access uses one `#define` per register, each mapped to a raw memory address.
 
-Same behavior as [`arm-cortex-m/01-systick/`](../../arm-cortex-m/01-systick/). The difference is only in how registers are declared and used.
+Same behavior as [`arm-cortex-m/00-systick/`](../../arm-cortex-m/00-systick/). The difference is only in how registers are declared and used.
 
 Demo clip for the whole series lives in the [root README](../../README.md#demo).
 
@@ -42,4 +42,4 @@ make debug
 
 Simplest way to touch a register from C: give it an address, cast to `volatile uint32_t*`, dereference.
 
-Compare with [`02-register-struct/`](../02-register-struct/), which groups registers by peripheral into a struct.
+Compare with [`01-register-struct/`](../01-register-struct/), which groups registers by peripheral into a struct.

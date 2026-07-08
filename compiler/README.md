@@ -5,5 +5,5 @@ Bare-metal build and link topics: linker scripts, startup code (C and C++), and 
 
 | # | Folder | Topic |
 |---|--------|-------|
-| 01 | [`01-startup-c/`](01-startup-c/) | Linker script and C `Reset_Handler` |
+| 00 | [`00-startup-c/`](00-startup-c/) | Linker script and C `Reset_Handler` |
 
