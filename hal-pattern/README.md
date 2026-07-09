@@ -14,7 +14,7 @@ Same LED blink behavior in every subfolder — only the way registers are declar
 | 03 | [`03-hal-blocking/`](03-hal-blocking/) | HAL with blocking `HAL_Delay` |
 | 04 | [`04-hal-nonblocking/`](04-hal-nonblocking/) | HAL with non-blocking `HAL_GetTick` |
 
-## Prerequisite
+## Before you start
 
 Read [`arm-cortex-m/00-systick`](../arm-cortex-m/00-systick/) first — every folder here uses SysTick for the 1 ms tick.
 

@@ -10,6 +10,6 @@ Everything here belongs to the CPU core itself, not the STM32 peripherals — po
 |---|--------|-------|
 | 00 | [`00-systick/`](00-systick/) | 1 ms SysTick tick and interrupt |
 
-## Prerequisite
+## Before you start
 
 Read [`compiler/`](../compiler/) first — startup code is the same skeleton used in every example here.
